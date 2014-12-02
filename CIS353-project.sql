@@ -104,6 +104,7 @@ price INTEGER
 );
 --
 SET AUTOCOMMIT OFF
+SET FEEDBACK OFF
 --
 INSERT INTO Event VALUES (1, '06-AUG-16',987);
 INSERT INTO Event VALUES (2, '08-AUG-16', 67);
@@ -148,10 +149,25 @@ INSERT INTO Country VALUES('Sweden',9728498 );
 INSERT INTO Country VALUES('Belgium',11225469);
 INSERT INTO Country VALUES( 'Ghana' , 27043093)
 --
+SET FEEDBACK ON
 COMMIT;
--- ------------------------------------
+--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
+--***********--QUERIES--*************--
+--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
+
+--Returns a list of countries with higher
+--than average populations.
+SELECT C.cname, C.population
+FROM Country C
+MINUS
+SELECT C.cname, C.population
+FROM Country C
+WHERE C.population < (SELECT AVG(C.population) FROM Country C);
+
+
+
 SPOOL OFF
 --
