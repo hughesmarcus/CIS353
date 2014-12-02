@@ -146,6 +146,7 @@ INSERT INTO Country VALUES('Portugal', 10477800 );
 INSERT INTO Country VALUES('Jamaica' , 2717991);
 INSERT INTO Country VALUES('Sweden',9728498 );
 INSERT INTO Country VALUES('Belgium',11225469);
+INSERT INTO Country VALUES( 'Ghana' , 27043093)
 --
 COMMIT;
 -- ------------------------------------
