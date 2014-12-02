@@ -187,5 +187,11 @@ COMMIT;
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
+
+SELECT S1.eid, S2.eid 
+FROM Sponsors S1, Sponsors S2
+WHERE S1. eid > 3 AND 
+S1.sponsor_name = S2.sponsor_name AND
+S1.eid < S2.eid ;
 SPOOL OFF
 --
