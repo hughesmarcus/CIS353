@@ -33,7 +33,7 @@ CONSTRAINT EC1 PRIMARY KEY (eid),
 CONSTRAINT EC2 CHECK (empty_seats <= 10000 AND empty_seats >= 0),
 -- EC3: Checks that the date of the event is within a valid range
 -- for the 2016 summer Olympics (08/05/2016 - 08/21/2016)
-CONSTRAINT EC3 CHECK(TO_CHAR(event_date, 'YYYY-MM-DD') >= '2016-08-05')
+CONSTRAINT EC3 CHECK(TO_CHAR(event_date, 'YYYY-MM-DD') >= '2016-08-05' AND TO_CHAR(event_date, 'YYYY-MM-DD') <= '2016-08-21')
 );
 --
 -- ------------------------------------
@@ -105,9 +105,10 @@ price INTEGER
 --
 SET AUTOCOMMIT OFF
 --
-INSERT INTO Event VALUES (34567, '06-AUG-16',987);
-INSERT INTO Event VALUES (67895, '08-AUG-16', 67);
-INSERT INTO Event VALUES (34598, '13-AUG-16', 5);
+INSERT INTO Event VALUES (1, '06-AUG-16',987);
+INSERT INTO Event VALUES (2, '08-AUG-16', 67);
+INSERT INTO Event VALUES (3, '13-AUG-16', 5);
+INSERT INTO Event VALUES (4, '21-AUG-16', 30);
 --
 INSERT INTO Country VALUES('United States', 319134000);
 INSERT INTO Country VALUES('China', 1368030000 );
