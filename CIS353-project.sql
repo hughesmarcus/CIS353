@@ -99,7 +99,13 @@ CREATE TABLE Ticket
 (
 ticket_number INTEGER,
 section_number INTEGER,
-price INTEGER
+price INTEGER,
+eid INTEGER
+--
+CONSTRAINT TC1 PRIMARY KEY (eid, ticket_number),
+CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
+    ON DELETE CASCADE
+    DEFERRABLE INITIALLY DEFERRED
 --
 );
 --
@@ -150,6 +156,10 @@ INSERT INTO Country VALUES( 'Ghana' , 27043093)
 --
 COMMIT;
 -- ------------------------------------
+SELECT DISTINCT S.fname, A.fname
+From Spectator S, Athlete A, Event E, Country C, Ticket T
+WHERE 
+--
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
