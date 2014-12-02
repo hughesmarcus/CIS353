@@ -110,6 +110,7 @@ CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
 );
 --
 SET AUTOCOMMIT OFF
+SET FEEDBACK OFF
 --
 INSERT INTO Event VALUES (1, '06-AUG-16',987);
 INSERT INTO Event VALUES (2, '08-AUG-16', 67);
@@ -188,20 +189,45 @@ INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN');
 INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick');
 INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
 --
+SET FEEDBACK ON
 COMMIT;
 -- ------------------------------------
 --SELECT DISTINCT S.fname, A.fname
 --From Spectator S, Athlete A, Event E, Country C, Ticket T
 --WHERE 
 --
+--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
+--***********--QUERIES--*************--
+--$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
-
+--
+--Returns a list of countries with higher
+--than average populations.
+SELECT C.cname, C.population
+FROM Country C
+MINUS
+SELECT C.cname, C.population
+FROM Country C
+WHERE C.population < (SELECT AVG(C.population) FROM Country C);
+--
 SELECT S1.eid, S2.eid 
 FROM Sponsors S1, Sponsors S2
 WHERE S1. eid > 3 AND 
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
+SELECT *, 
+Event E
+WHERE  
+	NOT EXISTS ( SELECT *
+	FROM  Sponsors S
+	WHERE E.eid = S.eid);
+--
+SELECT *, 
+Event E
+WHERE  
+	E.eid NOT IN ( SELECT *
+	FROM  Sponsors S);
 SPOOL OFF
 --
