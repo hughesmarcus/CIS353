@@ -182,8 +182,6 @@ INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN');
 INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick');
 INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
 --
-INSERT INTO
---
 COMMIT;
 -- ------------------------------------
 SELECT * FROM Event;
