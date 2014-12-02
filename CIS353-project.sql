@@ -43,7 +43,7 @@ CONSTRAINT EC3 CHECK(TO_CHAR(event_date, 'YYYY-MM-DD') >= '2016-08-05' AND TO_CH
 CREATE TABLE Sponsors
 (
 eid INTEGER,
-sponsor_name CHAR(20) NOT NULL,
+sponsor_name CHAR(30) NOT NULL,
 --
 -- SC1: Event ID and sponsor name are the primary key of Sponsors
 CONSTRAINT SC1 PRIMARY KEY (eid, sponsor_name),
@@ -61,8 +61,8 @@ CONSTRAINT SC2 FOREIGN KEY (eid) REFERENCES Event(eid)
 CREATE TABLE Athlete
 (
 aid INTEGER,
-lname CHAR(10) NOT NULL,
-fname CHAR(10) NOT NULL,
+lname CHAR(30) NOT NULL,
+fname CHAR(30) NOT NULL,
 --
 --
 CONSTRAINT AC1 PRIMARY KEY (aid)
@@ -71,7 +71,7 @@ CONSTRAINT AC1 PRIMARY KEY (aid)
 --
 CREATE TABLE Country
 (
-cname VARCHAR2(15) NOT NULL,
+cname VARCHAR2(35) NOT NULL,
 population INTEGER,
 --
 --
@@ -85,8 +85,8 @@ CONSTRAINT CC1 PRIMARY KEY (cname)
 CREATE TABLE Spectator
 (
 sid INTEGER,
-lname CHAR(10) NOT NULL,
-fname CHAR(10) NOT NULL,
+lname CHAR(30) NOT NULL,
+fname CHAR(30) NOT NULL,
 --
 --
 CONSTRAINT SPC1 PRIMARY KEY (sid)
@@ -100,7 +100,7 @@ CREATE TABLE Ticket
 ticket_number INTEGER,
 section_number INTEGER,
 price INTEGER,
-eid INTEGER
+eid INTEGER,
 --
 CONSTRAINT TC1 PRIMARY KEY (eid, ticket_number),
 CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
@@ -190,9 +190,9 @@ INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
 --
 COMMIT;
 -- ------------------------------------
-SELECT DISTINCT S.fname, A.fname
-From Spectator S, Athlete A, Event E, Country C, Ticket T
-WHERE 
+--SELECT DISTINCT S.fname, A.fname
+--From Spectator S, Athlete A, Event E, Country C, Ticket T
+--WHERE 
 --
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
