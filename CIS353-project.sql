@@ -193,5 +193,18 @@ FROM Sponsors S1, Sponsors S2
 WHERE S1. eid > 3 AND 
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
+SELECT *, 
+Event E
+WHERE  
+	NOT EXISTS ( SELECT *
+	FROM  Sponsors S
+	WHERE E.eid = S.eid);
+
+SELECT *, 
+Event E
+WHERE  
+	E.eid NOT IN ( SELECT *
+	FROM  Sponsors S);
+
 SPOOL OFF
 --
