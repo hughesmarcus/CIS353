@@ -110,6 +110,18 @@ INSERT INTO Event VALUES (1, '06-AUG-16',987);
 INSERT INTO Event VALUES (2, '08-AUG-16', 67);
 INSERT INTO Event VALUES (3, '13-AUG-16', 5);
 INSERT INTO Event VALUES (4, '21-AUG-16', 30);
+INSERT INTO Event VALUES (5, '07-AUG-16',254);
+INSERT INTO Event VALUES (6, '09-AUG-16', 670);
+INSERT INTO Event VALUES (7, '11-AUG-16', 51);
+INSERT INTO Event VALUES (8, '11-AUG-16', 0);
+INSERT INTO Event VALUES (9, '11-AUG-16', 87);
+INSERT INTO Event VALUES (10, '21-AUG-16', 67);
+INSERT INTO Event VALUES (11, '15-AUG-16', 9000);
+INSERT INTO Event VALUES (12, '16-AUG-16', 0007);
+INSERT INTO Event VALUES (13, '17-AUG-16', 21);
+INSERT INTO Event VALUES (14, '18-AUG-16', 781);
+INSERT INTO Event VALUES (15, '19-AUG-16', 19);
+INSERT INTO Event VALUES (16, '20-AUG-16', 20);
 --
 INSERT INTO Country VALUES('United States', 319134000);
 INSERT INTO Country VALUES('China', 1368030000 );
@@ -147,7 +159,29 @@ INSERT INTO Country VALUES('Portugal', 10477800 );
 INSERT INTO Country VALUES('Jamaica' , 2717991);
 INSERT INTO Country VALUES('Sweden',9728498 );
 INSERT INTO Country VALUES('Belgium',11225469);
-INSERT INTO Country VALUES( 'Ghana' , 27043093)
+INSERT INTO Country VALUES('Ghana' , 27043093);
+--
+INSERT INTO Athlete VALUES(10, 'OBrien', 'John');
+INSERT INTO Athlete VALUES(11, 'OBrien', 'Jack');
+INSERT INTO Athlete VALUES(12, 'Hughes', 'Marcus');
+INSERT INTO Athlete VALUES(13, 'Keel', 'Travis');
+INSERT INTO Athlete VALUES(14, 'Ramic', 'Alen');
+INSERT INTO Athlete VALUES(15, 'Kelch', 'Daniel');
+INSERT INTO Athlete VALUES(16, 'Springus', 'Harold');
+INSERT INTO Athlete VALUES(17, 'Hawthorne', 'Gerald');
+INSERT INTO Athlete VALUES(18, 'Front', 'Rosemary');
+INSERT INTO Athlete VALUES(19, 'Tennis', 'Tim');
+INSERT INTO Athlete VALUES(20, 'Robertson', 'Robert');
+INSERT INTO Athlete VALUES(21, 'Hudson', 'Marlene');
+INSERT INTO Athlete VALUES(22, 'West', 'North');
+INSERT INTO Athlete VALUES(23, 'Philips', 'Michael');
+INSERT INTO Athlete VALUES(24, 'Muscle', 'Uncle');
+INSERT INTO Athlete VALUES(25, 'Lee', 'Bryce');
+INSERT INTO Athlete VALUES(26, 'Hoke', 'Brady');
+INSERT INTO Athlete VALUES(27, 'Seger', 'Bill');
+INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN');
+INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick');
+INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
 --
 SET FEEDBACK ON
 COMMIT;
@@ -157,7 +191,7 @@ COMMIT;
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
-
+--
 --Returns a list of countries with higher
 --than average populations.
 SELECT C.cname, C.population
@@ -166,8 +200,23 @@ MINUS
 SELECT C.cname, C.population
 FROM Country C
 WHERE C.population < (SELECT AVG(C.population) FROM Country C);
-
-
-
+--
+SELECT S1.eid, S2.eid 
+FROM Sponsors S1, Sponsors S2
+WHERE S1. eid > 3 AND 
+S1.sponsor_name = S2.sponsor_name AND
+S1.eid < S2.eid ;
+SELECT *, 
+Event E
+WHERE  
+	NOT EXISTS ( SELECT *
+	FROM  Sponsors S
+	WHERE E.eid = S.eid);
+--
+SELECT *, 
+Event E
+WHERE  
+	E.eid NOT IN ( SELECT *
+	FROM  Sponsors S);
 SPOOL OFF
 --
