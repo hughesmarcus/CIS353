@@ -229,5 +229,8 @@ Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
 	FROM  Sponsors S);
+	
+SELECT T.eid , T.ticket_number , E.eid , E.event_date
+	FROM TICKET T LEFT OUTER JOIN EVENTS E ON T.eid = E.eid;
 SPOOL OFF
 --
