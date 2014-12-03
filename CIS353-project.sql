@@ -26,6 +26,7 @@ CREATE TABLE Event
 eid INTEGER,
 event_date DATE NOT NULL,
 empty_seats INTEGER NOT NULL,
+sport CHAR(30),
 --
 -- EC1: The event id (eid) is the primary key of Event
 CONSTRAINT EC1 PRIMARY KEY (eid),
@@ -63,19 +64,38 @@ CREATE TABLE Athlete
 aid INTEGER,
 lname CHAR(30) NOT NULL,
 fname CHAR(30) NOT NULL,
+country CHAR(35) NOT NULL,
+mentorID INTEGER,
 --
 --
-CONSTRAINT AC1 PRIMARY KEY (aid)
+CONSTRAINT AC1 PRIMARY KEY (aid),
+CONSTRAINT AC2 FOREIGN KEY (mentorID) REFERENCES Athlete(aid)
+	ON DELETE CASCADE
+	DEFERABLE INITIALLY DEFERRED,
+CONSTRAINT AC3 FOREIGN KEY (country) REFERENCES Country(cname)
+	ON DELETE CASCADE
 );
 --
+CREATE TABLE CompetesIn
+(
+eid INTEGER,
+aid INTEGER,
+medal CHAR(15) NOT NULL,
+--
+CONSTRAINT CIC1 PRIMARY KEY (eid, aid),
+CONSTRAINT CIC2 CHECK(medal = 'gold' || medal = 'silver' || medal = 'bronze' || medal = 'none'),
+CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid),
+CONSTRAINT CIC4 FOREIGN KEY (aid) REFERENCES Athlete(aid)
+);
 --
 CREATE TABLE Country
 (
-cname VARCHAR2(35) NOT NULL,
-population INTEGER,
+cname CHAR(35) NOT NULL,
+population INTEGER NOT NULL,
 --
 --
-CONSTRAINT CC1 PRIMARY KEY (cname)
+CONSTRAINT CC1 PRIMARY KEY (cname),
+CONSTRAINT CC2 CHECK (population >= 0)
 );
 --
 -- ------------------------------------
@@ -87,9 +107,15 @@ CREATE TABLE Spectator
 sid INTEGER,
 lname CHAR(30) NOT NULL,
 fname CHAR(30) NOT NULL,
+tnum INTEGER NOT NULL,
+eid INTEGER NOT NULL,
+cname CHAR(35) NOT NULL;
 --
 --
-CONSTRAINT SPC1 PRIMARY KEY (sid)
+CONSTRAINT SPC1 PRIMARY KEY (sid),
+CONSTRAINT SPC2 FOREIGN KEY (tnum) REFERENCES Ticket(ticket_number),
+CONSTRAINT SPC3 FOREIGN KEY (eid) REFERENCES Ticket(eid),
+CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
 );
 -- ------------------------------------
 -- Ticket table
