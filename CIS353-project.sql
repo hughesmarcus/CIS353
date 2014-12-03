@@ -238,6 +238,7 @@ SELECT C.cname, C.population
 FROM Country C
 WHERE C.population < (SELECT AVG(C.population) FROM Country C);
 --
+--
 SELECT S1.eid, S2.eid 
 FROM Sponsors S1, Sponsors S2
 WHERE S1. eid > 3 AND 
@@ -250,10 +251,25 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
+--
 SELECT *, 
-Event E
+FROM Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
 	FROM  Sponsors S);
+--	
+SELECT T.eid , T.ticket_number , E.eid , E.event_date
+	FROM TICKET T LEFT OUTER JOIN EVENTS E ON T.eid = E.eid;
+------Divisional Subquery---------
+SELECT A.aid, A.country, A.lname
+FROM Athlete A
+WHERE NOT EXISTS((SELECT E.eid
+				   FROM Event E
+				   WHERE E.eid = 4
+				   MINUS
+				   (SELECT E.Sport
+				    FROM Event E, CompetesIn C
+				    WHERE C.aid = A.aid AND
+						  C.eid = E.eid AND
+						  E.eid = 4));
 SPOOL OFF
---
