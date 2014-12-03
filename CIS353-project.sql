@@ -16,6 +16,7 @@ DROP TABLE Athlete;
 DROP TABLE Spectator;
 DROP TABLE Ticket;
 DROP TABLE Country;
+DROP TABLE CompetesIn;
 --
 -- ------------------------------------
 -- Event table
@@ -230,6 +231,12 @@ COMMIT;
 --***********--QUERIES--*************--
 --$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
 SELECT * FROM Event;
+SELECT * FROM Athlete;
+SELECT * FROM Country; 
+SELECT * FROM Spectator;
+SELECT * FROM Ticket;
+SELECT * FROM Sponsors;
+SELECT * FROM CompetesIn;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
 --
