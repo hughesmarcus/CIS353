@@ -238,12 +238,14 @@ SELECT C.cname, C.population
 FROM Country C
 WHERE C.population < (SELECT AVG(C.population) FROM Country C);
 --
---
+-- Self Join 
 SELECT S1.eid, S2.eid 
 FROM Sponsors S1, Sponsors S2
 WHERE S1. eid > 3 AND 
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
+--
+--correlated subquery 
 SELECT *, 
 Event E
 WHERE  
@@ -251,13 +253,14 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
---
+-- non-correlated subquery
 SELECT *, 
 FROM Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
 	FROM  Sponsors S);
---	
+--
+--LEFT OUTER JOIN 
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
 	FROM TICKET T LEFT OUTER JOIN EVENTS E ON T.eid = E.eid;
 ------Divisional Subquery---------
