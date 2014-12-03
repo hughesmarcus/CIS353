@@ -231,7 +231,10 @@ FROM Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
 	FROM  Sponsors S);
---
+--	
+SELECT T.eid , T.ticket_number , E.eid , E.event_date
+	FROM TICKET T LEFT OUTER JOIN EVENTS E ON T.eid = E.eid;
+------Divisional Subquery---------
 SELECT A.aid, A.country, A.lname
 FROM Athlete A
 WHERE NOT EXISTS((SELECT E.eid
@@ -243,3 +246,4 @@ WHERE NOT EXISTS((SELECT E.eid
 				    WHERE C.aid = A.aid AND
 						  C.eid = E.eid AND
 						  E.eid = 4));
+SPOOL OFF
