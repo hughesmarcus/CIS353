@@ -117,6 +117,7 @@ CONSTRAINT SPC2 FOREIGN KEY (tnum) REFERENCES Ticket(ticket_number),
 CONSTRAINT SPC3 FOREIGN KEY (eid) REFERENCES Ticket(eid),
 CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
 );
+--
 -- ------------------------------------
 -- Ticket table
 -- ------------------------------------
@@ -137,6 +138,10 @@ CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
 --
 SET AUTOCOMMIT OFF
 SET FEEDBACK OFF
+---
+-- ------------------------------------
+-- Populate the tables here
+-- ------------------------------------
 --
 INSERT INTO Event VALUES (1, '06-AUG-16',987);
 INSERT INTO Event VALUES (2, '08-AUG-16', 67);
@@ -217,20 +222,20 @@ INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
 --
 SET FEEDBACK ON
 COMMIT;
--- ------------------------------------
---SELECT DISTINCT S.fname, A.fname
---From Spectator S, Athlete A, Event E, Country C, Ticket T
---WHERE 
 --
---$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
---***********--QUERIES--*************--
---$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
+-- ------------------------------------
+-- -----------QUERIES BELOW------------
+-- ------------------------------------
+--
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
 --
---Returns a list of countries with higher
---than average populations.
+-- ------------------------------------
+-- Uses MINUS and AVG, returns the
+-- countries with above avg population
+-- ------------------------------------
+--
 SELECT C.cname, C.population
 FROM Country C
 MINUS
@@ -238,14 +243,20 @@ SELECT C.cname, C.population
 FROM Country C
 WHERE C.population < (SELECT AVG(C.population) FROM Country C);
 --
--- Self Join 
+-- ------------------------------------
+-- Self Join
+-- ------------------------------------
+--
 SELECT S1.eid, S2.eid 
 FROM Sponsors S1, Sponsors S2
 WHERE S1. eid > 3 AND 
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
---correlated subquery 
+-- ------------------------------------
+-- Correlated subquery
+-- ------------------------------------
+--
 SELECT *, 
 Event E
 WHERE  
@@ -253,17 +264,27 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
--- non-correlated subquery
+-- ------------------------------------
+-- Non-correlated subquery
+-- ------------------------------------
+--
 SELECT *, 
 FROM Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
 	FROM  Sponsors S);
 --
---LEFT OUTER JOIN 
+-- ------------------------------------
+-- Marcus made this
+-- ------------------------------------
+--
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
-	FROM TICKET T LEFT OUTER JOIN EVENTS E ON T.eid = E.eid;
-------Divisional Subquery---------
+	FROM TICKET T LEFT OUTER JOIN EVENT E ON T.eid = E.eid;
+--
+-- ------------------------------------
+-- Divisional Subquery
+-- ------------------------------------
+--
 SELECT A.aid, A.country, A.lname
 FROM Athlete A
 WHERE NOT EXISTS((SELECT E.eid
