@@ -130,7 +130,7 @@ price INTEGER,
 eid INTEGER,
 sid INTEGER,
 --
-CONSTRAINT TC1 PRIMARY KEY (eid, ticket_number),
+CONSTRAINT TC1 PRIMARY KEY (eid, sid, ticket_number),
 CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
 	ON DELETE CASCADE
     	DEFERRABLE INITIALLY DEFERRED,
@@ -231,12 +231,6 @@ COMMIT;
 --***********--QUERIES--*************--
 --$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
 SELECT * FROM Event;
-SELECT * FROM Athlete;
-SELECT * FROM Country; 
-SELECT * FROM Spectator;
-SELECT * FROM Ticket;
-SELECT * FROM Sponsors;
-SELECT * FROM CompetesIn;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
 --
