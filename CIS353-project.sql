@@ -246,15 +246,15 @@ S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
 --correlated subquery 
-SELECT *, 
-Event E
+SELECT E.eid, E.event_date
+FROM Event E
 WHERE  
 	NOT EXISTS ( SELECT *
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
 -- non-correlated subquery
-SELECT *, 
+SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
