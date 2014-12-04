@@ -296,6 +296,36 @@ INSERT INTO Ticket VALUES (40, 4, 25, 13 , 119);
 INSERT INTO Ticket VALUES (41, 5, 30, 14 , 120);
 INSERT INTO Ticket VALUES (44 , 1 , 100 , 10 , 121);
 --
+INSERT INTO Sponsors VALUES (1, 'Microsoft');
+INSERT INTO Sponsors VALUES (1, 'Ford');
+INSERT INTO Sponsors VALUES (2, 'Ford');
+INSERT INTO Sponsors VALUES (2, 'Apple');
+INSERT INTO Sponsors VALUES (3, 'GVSU');
+INSERT INTO Sponsors VALUES (3, 'Facebook');
+INSERT INTO Sponsors VALUES (4, 'Milk');
+INSERT INTO Sponsors VALUES (4 , 'Ford');
+INSERT INTO Sponsors VALUES (5 , 'Facebook');
+INSERT INTO Sponsors VALUES (5 , 'Apple');
+INSERT INTO Sponsors VALUES (6 , 'ACM');
+INSERT INTO Sponsors VALUES (6 , 'Xfinity');
+INSERT INTO Sponsors VALUES (7 , ' Real');
+INSERT INTO Sponsors VALUES (7, 'Totco');
+INSERT INTO Sponsors VALUES (8 , 'Burger King');
+INSERT INTO Sponsors VALUES (8, 'Clean Water');
+INSERT INTO Sponsors VALUES (9, 'Powerhouse');
+INSERT INTO Sponsors VALUES (9, 'Midland');
+INSERT INTO Sponsors VALUES (10 , 'Newhouse');
+INSERT INTO Sponsors VALUES (10 , 'GVSU');
+INSERT INTO Sponsors VALUES (11 , 'Ford');
+INSERT INTO Sponsors VALUES (12 , 'Facebook');
+INSERT INTO Sponsors VALUES (11 , 'Milk');
+INSERT INTO Sponsors VALUES (12 , 'Real');
+INSERT INTO Sponsors VALUES (13 , 'Joes Pizza');
+INSERT INTO Sponsors VALUES (13 , 'Apple');
+INSERT INTO Sponsors VALUES (14 , 'Totco');
+INSERT INTO Sponsors VALUES (14 , 'ACM');
+INSERT INTO Sponsors VALUES (15 , 'Facebook');
+INSERT INTO Sponsors VALUES (15 , 'Clean Water');
 SET FEEDBACK ON
 COMMIT;
 --
