@@ -75,7 +75,7 @@ CONSTRAINT AC2 FOREIGN KEY (mentorID) REFERENCES Athlete(aid)
     DEFERRABLE INITIALLY DEFERRED,
 CONSTRAINT AC3 FOREIGN KEY (country) REFERENCES Country(cname)
 	ON DELETE CASCADE
-	DEFERABLE INITIALLY DEFERRED
+	DEFERRABLE INITIALLY DEFERRED
 );
 --
 CREATE TABLE CompetesIn
@@ -291,13 +291,6 @@ WHERE S1. eid > 3 AND
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
--- ------------------------------------
--- Correlated subquery
--- ------------------------------------
---
-SELECT *, 
-Event E
---correlated subquery 
 SELECT E.eid, E.event_date
 FROM Event E
 WHERE  
@@ -305,12 +298,6 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
--- ------------------------------------
--- Non-correlated subquery
--- ------------------------------------
---
-SELECT *, 
--- non-correlated subquery
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
