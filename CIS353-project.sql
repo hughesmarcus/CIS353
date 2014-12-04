@@ -327,7 +327,7 @@ INSERT INTO Sponsors VALUES (14 , 'ACM');
 INSERT INTO Sponsors VALUES (15 , 'Facebook');
 INSERT INTO Sponsors VALUES (15 , 'Clean Water');
 --
-INSERT INTO CompetesIn VALUES (1 , 10 , 'gold');
+INSERT INTO CompetesIn VALUES (10 , 10 , 'none');
 INSERT INTO CompetesIn VALUES (2,. 11 , 'silver');
 INSERT INTO CompetesIn VALUES (3 , 12 , 'bronze');
 INSERT INTO CompetesIn VALUES (4 , 13 , 'none');
