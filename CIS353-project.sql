@@ -237,6 +237,10 @@ INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick', 'Italy', NULL);
 INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James', 'France', NULL);
 --
 INSERT INTO Spectator VALUES(100, 'Miller', 'John', 'United States');
+INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
+INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
+INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
+INSERT INTO Spectator VALUES(110, 'Miller', 'John', 'United States');
 INSERT INTO Spectator VALUES(101, 'Sanches', 'Aguero', 'Argentina');
 INSERT INTO Spectator VALUES(102, 'Lee', 'Wong', 'China');
 INSERT INTO Spectator VALUES(103, 'Aqel', 'Mohammad', 'Egypt');
@@ -246,7 +250,6 @@ INSERT INTO Spectator VALUES(106, 'Shizmahal', 'Berut', 'Indonesia');
 INSERT INTO Spectator VALUES(107, 'Sanches', 'Neymar', 'Brazil');
 INSERT INTO Spectator VALUES(108, 'Kroptykov', 'Vladimir', 'Russia');
 INSERT INTO Spectator VALUES(109, 'Shango', 'Wan', 'Japan');
-INSERT INTO Spectator VALUES(110, 'Miller', 'John', 'United States');
 INSERT INTO Spectator VALUES(111, 'Wienerschintzle', 'Hanz', 'Germany');
 INSERT INTO Spectator VALUES(112, 'Uccello', 'Fabio', 'Italy');
 INSERT INTO Spectator VALUES(113, 'Fabregas', 'Iniesta', 'Spain');
@@ -255,9 +258,6 @@ INSERT INTO Spectator VALUES(115, 'Christiano', 'Ronaldo', 'Portugal');
 INSERT INTO Spectator VALUES(116, 'Kriplani', 'Mehmenal', 'India');
 INSERT INTO Spectator VALUES(117, 'Rastip', 'Shahimteg', 'India');
 INSERT INTO Spectator VALUES(118, 'Mahood', 'Melket', 'India');
-INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
-INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
-INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
 --
 INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100); 
 INSERT INTO Ticket VALUES (2, 1, 119, 2 , 101);
@@ -269,7 +269,7 @@ INSERT INTO Ticket VALUES (7, 1, 114, 7 , 106);
 INSERT INTO Ticket VALUES (8, 1, 113, 8 , 107);
 INSERT INTO Ticket VALUES (9, 1, 112, 9 , 108);
 INSERT INTO Ticket VALUES (10, 1, 111, 10, 109); 
-INSERT INTO Ticket VALUES (11, 1, 110, 11 , 110);
+INSERT INTO Ticket VALUES (11, 1, 110, 1 , 110);
 INSERT INTO Ticket VALUES (12, 1, 109, 12, 111);
 INSERT INTO Ticket VALUES (13, 1, 108, 13 , 112);
 INSERT INTO Ticket VALUES (14, 1, 107, 14 , 113);
@@ -285,22 +285,27 @@ INSERT INTO Ticket VALUES (23, 1, 114, 7 , 106);
 INSERT INTO Ticket VALUES (24, 3, 113, 8 , 107);
 INSERT INTO Ticket VALUES (25, 4, 112, 9 , 108);
 INSERT INTO Ticket VALUES (26 , 2, 111 , 10 , 109); 
-INSERT INTO Ticket VALUES (27, 2, 110, 11 , 110);
+INSERT INTO Ticket VALUES (27, 2, 110, 1 , 110);
 INSERT INTO Ticket VALUES (28, 3, 109, 12, 111);
 INSERT INTO Ticket VALUES (29, 4, 25, 13 , 112);
 INSERT INTO Ticket VALUES (30, 5, 30, 14 , 113);
 INSERT INTO Ticket VALUES (31, 2, 100, 15 , 114);
 INSERT INTO Ticket VALUES (32, 1, 120, 16 , 115);
-INSERT INTO Ticket VALUES (33 , 1 , 100 , 10 , 121);
+INSERT INTO Ticket VALUES (33 , 1 , 100 , 1 , 121);
 INSERT INTO Ticket VALUES (34, 1, 114, 7 , 117);
 INSERT INTO Ticket VALUES (35, 3, 113, 8 , 118);
-INSERT INTO Ticket VALUES (36, 4, 112, 9 , 119);
-INSERT INTO Ticket VALUES (37 , 2, 111 , 10 , 120); 
+INSERT INTO Ticket VALUES (36, 4, 112, 1 , 119);
+INSERT INTO Ticket VALUES (37 , 2, 111 , 1 , 120); 
 INSERT INTO Ticket VALUES (38, 2, 110, 11 , 117);
 INSERT INTO Ticket VALUES (39, 3, 109, 12, 118);
-INSERT INTO Ticket VALUES (40, 4, 25, 13 , 119);
-INSERT INTO Ticket VALUES (41, 5, 30, 14 , 120);
-INSERT INTO Ticket VALUES (44 , 1 , 100 , 10 , 121);
+INSERT INTO Ticket VALUES (40, 4, 25, 1 , 119);
+INSERT INTO Ticket VALUES (41, 5, 30, 1 , 120);
+INSERT INTO Ticket VALUES (44 , 1 , 100 , 1 , 121);
+INSERT INTO Ticket VALUES (45, 1, 120, 16, 100);
+INSERT INTO Ticket VALUES (46, 1, 120, 16, 119);
+INSERT INTO Ticket VALUES (47, 1, 120, 16, 120);
+INSERT INTO Ticket VALUES (48, 1, 120, 16, 121);
+INSERT INTO Ticket VALUES (49, 1, 120, 16, 110);
 --
 INSERT INTO Sponsors VALUES (1, 'Microsoft');
 INSERT INTO Sponsors VALUES (1, 'Ford');
@@ -432,19 +437,19 @@ SELECT T.eid , T.ticket_number , E.eid , E.event_date
 --
 -- --------------------------------------------------------
 -- - Q7 - Division, Coorelated Subquery, Minus
--- 
+-- - Returns all events that all Americans are attending
 -- --------------------------------------------------------
-SELECT S.sid, S.lname
-FROM Spectator S
-WHERE NOT EXISTS((SELECT E.eid
-				  FROM Event E
-				  WHERE E.eid = 1)
+SELECT E.eid, E.sport
+FROM Event E
+WHERE NOT EXISTS((SELECT S.cname
+				  FROM Spectator S
+				  WHERE S.cname = 'United States')
 				  MINUS
-				  (SELECT E.eid
-				   FROM Ticket T, Event E
+				  (SELECT S.cname
+				   FROM Spectator S, Ticket T
 				   WHERE T.sid = S.sid AND
 						 T.eid = E.eid AND
-						 E.eid = 1));
+						 S.cname = 'United States'));
 -----------------------------------------------------------
 --  GROUP BY ----
 --------------------------------------------------------
