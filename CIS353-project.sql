@@ -402,9 +402,9 @@ S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
 -- --------------------------------------------------------
--- Correlated subquery
+-- - Q4 - Correlated subquery
+-- Selects all events without sponsors
 -- --------------------------------------------------------
---
 SELECT E.eid, E.event_date
 FROM Event E
 WHERE  
@@ -413,26 +413,27 @@ WHERE
 	WHERE E.eid = S.eid);
 --
 -- --------------------------------------------------------
--- Non-correlated subquery
+-- - Q5 - Non-correlated subquery
+-- Selects all events without sponsors
 -- --------------------------------------------------------
---
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
-	E.eid NOT IN ( SELECT S.eid
+	E.eid NOT IN (SELECT S.eid
 	FROM  Sponsors S);
 --
--- ------------------------------------
--- Outer Join
--- ------------------------------------
---
+-- --------------------------------------------------------
+-- - Q6 - Outer Join
+-- Selects Ticket and Event where the ticket belongs to the 
+-- event
+-- --------------------------------------------------------
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
 	FROM Ticket T LEFT OUTER JOIN Event E ON T.eid = E.eid;
 --
 -- --------------------------------------------------------
--- Divisional Subquery
+-- - Q7 - Division, Coorelated Subquery, Minus
+-- 
 -- --------------------------------------------------------
---
 SELECT S.sid, S.lname
 FROM Spectator S
 WHERE NOT EXISTS((SELECT E.eid
@@ -454,9 +455,11 @@ C.cname = S.cname
 GROUP BY S.cname
 HAVING COUNT(*) > 3
 ORDER BY COUNT(*);
-----------------------------------------------------------
---  Join Involving 4 relations ----
-----------------------------------------------------------
+-- --------------------------------------------------------
+-- - Q9 - Join Involving 4 relations
+-- Selects all Spectators ad Athlets that attend the same event
+-- and are from teh same country
+-- --------------------------------------------------------
 SELECT DISTINCT S.fname, A.fname
 FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
 WHERE T.sid = S.sid AND
