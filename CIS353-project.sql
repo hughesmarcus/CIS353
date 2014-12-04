@@ -481,5 +481,14 @@ INSERT INTO Sponsors VALUES (1, 'Apple');
 INSERT INTO Sponsors VALUES (99999, 'Anything');
 DELETE FROM Event
 WHERE eid = 1;
+
+-- ------------------------------------------
+--CompetesIn Test
+-- --------------------------------------
+INSERT INTO CompetesIn VALUES (14, 30 , 'mike');
+INSERT INTO CompetesIn VALUES (14, 30 , 'none');
+
+
+
 --
 SPOOL OFF
