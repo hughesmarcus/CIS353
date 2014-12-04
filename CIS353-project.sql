@@ -341,12 +341,12 @@ WHERE NOT EXISTS((SELECT E.eid
 --------------------------------------
 --  GROUP BY ----
 --------------------------------------
-Select S.country, COUNT(*)
-from Spectator s, Country c
-Where c.population > 300,000,000 AND
-c.cname = s.country
-Group By s.country
-Having count(*) > 3;
+Select S.cname, COUNT(*)
+FROM Spectator S, Country C
+WHERE C.population > 300000000 AND
+C.cname = S.cname
+GROUP BY S.cname
+HAVING COUNT(*) > 3;
 
 
 
