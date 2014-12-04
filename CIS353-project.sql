@@ -10,6 +10,7 @@ CIS 353 - Database Design Project
 **************************************/
 --
 DROP TABLE Country CASCADE CONSTRAINT;
+DROP TABLE Country CASCADE CONSTRAINT;
 DROP TABLE Event CASCADE CONSTRAINT;
 DROP TABLE Athlete CASCADE CONSTRAINT;
 DROP TABLE Spectator CASCADE CONSTRAINT;
@@ -494,5 +495,10 @@ WHERE S.eid = 1;
 INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10);
 INSERT INTO Athlete VALUES(9231, 't', 't', 'made up', 10);
 INSERT INTO Athlete VALUES(123123, 'q', 'w', 'South Africa', 9999912);
+-- ------------------------------------------
+--CompetesIn Test
+-- --------------------------------------
+INSERT INTO CompetesIn VALUES (14, 30 , 'mike');
+INSERT INTO CompetesIn VALUES (14, 30 , 'none');
 --
 SPOOL OFF
