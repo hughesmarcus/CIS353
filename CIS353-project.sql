@@ -418,7 +418,7 @@ WHERE
 	FROM  Sponsors S);
 --
 -- ------------------------------------
--- Marcus made this
+-- Outer Join
 -- ------------------------------------
 --
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
