@@ -252,8 +252,49 @@ INSERT INTO Spectator VALUES(118, 'Mahood', 'Melket', 'India');
 INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
 INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
 INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
-
-
+--
+INSERT INTO Ticket VALUES ( 1 , 1, 120 , 1 , 100); 
+INSERT INTO Ticket VALUES (2, 1, 119, 2 , 101);
+INSERT INTO Ticket VALUES (3, 1, 118, 3 , 102);
+INSERT INTO Ticket VALUES (4, 1, 117, 4 , 103);
+INSERT INTO Ticket VALUES (5, 1, 116, 5 , 104);
+INSERT INTO Ticket VALUES (6, 1, 115, 6 , 105);
+INSERT INTO Ticket VALUES (7, 1, 114, 7 , 106);
+INSERT INTO Ticket VALUES (8, 1, 113, 8 , 107);
+INSERT INTO Ticket VALUES (9, 1, 112, 9 , 108);
+INSERT INTO Ticket VALUES (10 , 1, 111 , 10 , 109); 
+INSERT INTO Ticket VALUES (11, 1, 110, 11 , 110);
+INSERT INTO Ticket VALUES 12, 1, 109, 12, 111);
+INSERT INTO Ticket VALUES (13, 1, 108, 13 , 112);
+INSERT INTO Ticket VALUES (14, 1, 107, 14 , 113);
+INSERT INTO Ticket VALUES (15, 1, 100, 15 , 114);
+INSERT INTO Ticket VALUES (16, 1, 120, 16 , 115);
+INSERT INTO Ticket VALUES ( 17 , 2, 120 , 1 , 100); 
+INSERT INTO Ticket VALUES (18, 3, 119, 2 , 101);
+INSERT INTO Ticket VALUES (19, 3, 118, 3 , 102);
+INSERT INTO Ticket VALUES (20, 4, 117, 4 , 103);
+INSERT INTO Ticket VALUES (21, 3, 116, 5 , 104);
+INSERT INTO Ticket VALUES (22, 2, 115, 6 , 105);
+INSERT INTO Ticket VALUES (23, 1, 114, 7 , 106);
+INSERT INTO Ticket VALUES (24, 3, 113, 8 , 107);
+INSERT INTO Ticket VALUES (25, 4, 112, 9 , 108);
+INSERT INTO Ticket VALUES (26 , 2, 111 , 10 , 109); 
+INSERT INTO Ticket VALUES (27, 2, 110, 11 , 110);
+INSERT INTO Ticket VALUES (28, 3, 109, 12, 111);
+INSERT INTO Ticket VALUES (29, 4, 25, 13 , 112);
+INSERT INTO Ticket VALUES (30, 5, 30, 14 , 113);
+INSERT INTO Ticket VALUES (31, 2, 100, 15 , 114);
+INSERT INTO Ticket VALUES (32, 1, 120, 16 , 115);
+INSERT INTO Ticket VALUES (33 , 1 , 100 , 10 , 121);
+INSERT INTO Ticket VALUES (34, 1, 114, 7 , 117);
+INSERT INTO Ticket VALUES (35, 3, 113, 8 , 118);
+INSERT INTO Ticket VALUES (36, 4, 112, 9 , 119);
+INSERT INTO Ticket VALUES (37 , 2, 111 , 10 , 120); 
+INSERT INTO Ticket VALUES (38, 2, 110, 11 , 117);
+INSERT INTO Ticket VALUES (39, 3, 109, 12, 118);
+INSERT INTO Ticket VALUES (40, 4, 25, 13 , 119);
+INSERT INTO Ticket VALUES (41, 5, 30, 14 , 120);
+INSERT INTO Ticket VALUES (44 , 1 , 100 , 10 , 121);
 --
 SET FEEDBACK ON
 COMMIT;
@@ -363,5 +404,30 @@ WHERE T.sid = S.sid AND
 		S.cname = A.country;
 --
 -- TEST CONSTRAINTS
+--
+-- ------------------------------------
+-- Country Test
+-- ------------------------------------
+INSERT INTO Country VALUES ('United States', 2);
+INSERT INTO Country VALUES ('Just a test', -2);
+INSERT INTO Country VALUES ('THIS SHOULD WORK', 0);
+--
+-- ------------------------------------
+-- Event Test
+-- ------------------------------------
+INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport');
+INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport');
+INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport');
+INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S');
+INSERT INTO Event VALUES (2222, '8-AUG-16', 2, 'S');
+--
+-- ------------------------------------
+-- Sponsors Test
+-- ------------------------------------
+INSERT INTO Sponsors VALUES (1, 'Microsoft');
+INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES ();
 --
 SPOOL OFF
