@@ -473,15 +473,15 @@ INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport');
 INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport');
 INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport');
 INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S');
-INSERT INTO Event VALUES (2222, '8-AUG-16', 2, 'S');
+INSERT INTO Event VALUES (2222, '8-JAN-16', 2, 'S');
 --
 -- ------------------------------------
 -- Sponsors Test
 -- ------------------------------------
 INSERT INTO Sponsors VALUES (1, 'Microsoft');
-INSERT INTO Sponsors VALUES ();
-INSERT INTO Sponsors VALUES ();
-INSERT INTO Sponsors VALUES ();
-INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES (1, 'Apple');
+INSERT INTO Sponsors VALUES (99999, 'Anything');
+DELETE FROM Event
+WHERE eid = 1;
 --
 SPOOL OFF
