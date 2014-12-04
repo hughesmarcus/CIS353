@@ -141,7 +141,8 @@ CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
     	DEFERRABLE INITIALLY DEFERRED,
 CONSTRAINT TC3 FOREIGN KEY (sid) REFERENCES Spectator(sid)
 	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED
+	DEFERRABLE INITIALLY DEFERRED,
+CONSTRAINT TC4 CHECK(price >= 100/section_number)
 --
 );
 --
@@ -324,7 +325,7 @@ WHERE
 -- ------------------------------------
 --
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
-	FROM TICKET T LEFT OUTER JOIN EVENT E ON T.eid = E.eid;
+	FROM Ticket T LEFT OUTER JOIN Event E ON T.eid = E.eid;
 --
 -- ------------------------------------
 -- Divisional Subquery
