@@ -254,7 +254,7 @@ INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
 INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
 INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
 --
-INSERT INTO Ticket VALUES ( 1 , 1, 120 , 1 , 100); 
+INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100); 
 INSERT INTO Ticket VALUES (2, 1, 119, 2 , 101);
 INSERT INTO Ticket VALUES (3, 1, 118, 3 , 102);
 INSERT INTO Ticket VALUES (4, 1, 117, 4 , 103);
@@ -270,7 +270,7 @@ INSERT INTO Ticket VALUES (13, 1, 108, 13 , 112);
 INSERT INTO Ticket VALUES (14, 1, 107, 14 , 113);
 INSERT INTO Ticket VALUES (15, 1, 100, 15 , 114);
 INSERT INTO Ticket VALUES (16, 1, 120, 16 , 115);
-INSERT INTO Ticket VALUES ( 17 , 2, 120 , 1 , 100); 
+INSERT INTO Ticket VALUES (17 , 2, 120 , 1 , 100); 
 INSERT INTO Ticket VALUES (18, 3, 119, 2 , 101);
 INSERT INTO Ticket VALUES (19, 3, 118, 3 , 102);
 INSERT INTO Ticket VALUES (20, 4, 117, 4 , 103);
@@ -495,10 +495,26 @@ WHERE S.eid = 1;
 INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10);
 INSERT INTO Athlete VALUES(9231, 't', 't', 'made up', 10);
 INSERT INTO Athlete VALUES(123123, 'q', 'w', 'South Africa', 9999912);
--- ------------------------------------------
---CompetesIn Test
--- --------------------------------------
+-- -------------------------------------
+-- CompetesIn Test
+-- -------------------------------------
 INSERT INTO CompetesIn VALUES (14, 30 , 'mike');
-INSERT INTO CompetesIn VALUES (14, 30 , 'none');
+INSERT INTO CompetesIn VALUES (14, 31 , 'none');
+INSERT INTO CompetesIn VALUES (66, 29, 'jack');
+--
+-- ------------------------------------
+-- Spectator Test
+-- ------------------------------------
+INSERT INTO Spectator VALUES (100, 'l', 'f', 'United States');
+INSERT INTO Spectator VALUES (1, 'joe', 'cool', 'NOT A COUNTRYIES');
+--
+-- ------------------------------------
+-- Ticket Test
+-- ------------------------------------
+INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100); 
+INSERT INTO Ticket VALUES(1, 1, 200000, 1, 100);
+INSERT INTO Ticket VALUES(99, 1, 1, 1, 100);
+INSERT INTO Ticket VALUES(1, 1, 30000, 84717, 100);
+INSERT INTO Ticket VALUES(99, 1, 2231, 2, 87482);
 --
 SPOOL OFF
