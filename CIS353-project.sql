@@ -72,10 +72,10 @@ mentorID INTEGER,
 CONSTRAINT AC1 PRIMARY KEY (aid),
 CONSTRAINT AC2 FOREIGN KEY (mentorID) REFERENCES Athlete(aid)
 	ON DELETE CASCADE
-    DEFERRABLE INITIALLY DEFERRED,
+	DEFERABLE INITIALLY DEFERRED,
 CONSTRAINT AC3 FOREIGN KEY (country) REFERENCES Country(cname)
 	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED
+	DEFERABLE INITIALLY DEFERRED
 );
 --
 CREATE TABLE CompetesIn
@@ -87,11 +87,7 @@ medal CHAR(15) NOT NULL,
 CONSTRAINT CIC1 PRIMARY KEY (eid, aid),
 CONSTRAINT CIC2 CHECK(medal = 'gold' || medal = 'silver' || medal = 'bronze' || medal = 'none'),
 CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid),
-	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED,
 CONSTRAINT CIC4 FOREIGN KEY (aid) REFERENCES Athlete(aid)
-	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED
 );
 --
 CREATE TABLE Country
@@ -118,8 +114,6 @@ cname CHAR(35) NOT NULL,
 --
 CONSTRAINT SPC1 PRIMARY KEY (sid),
 CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
-	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED
 );
 --
 -- ------------------------------------
@@ -206,28 +200,28 @@ INSERT INTO Country VALUES('Sweden',9728498 );
 INSERT INTO Country VALUES('Belgium',11225469);
 INSERT INTO Country VALUES('Ghana' , 27043093);
 --
-INSERT INTO Athlete VALUES(10, 'OBrien', 'John', 'United States', NULL);
-INSERT INTO Athlete VALUES(11, 'OBrien', 'Jack', 'United States', 10);
-INSERT INTO Athlete VALUES(12, 'Hughes', 'Marcus', 'Germany', 15);
-INSERT INTO Athlete VALUES(13, 'Keel', 'Travis', 'Germany', 12);
-INSERT INTO Athlete VALUES(14, 'Ramic', 'Alen', 'Germany', 15);
-INSERT INTO Athlete VALUES(15, 'Kelch', 'Daniel', 'Germany', NULL);
-INSERT INTO Athlete VALUES(16, 'Springus', 'Harold', 'Russia', NULL);
-INSERT INTO Athlete VALUES(17, 'Hawthorne', 'Gerald', 'Russia', 16);
-INSERT INTO Athlete VALUES(18, 'Front', 'Rosemary', 'Russia', 17);
-INSERT INTO Athlete VALUES(19, 'Tennis', 'Tim', 'Canada', NULL);
-INSERT INTO Athlete VALUES(20, 'Robertson', 'Robert', 'Canada', 19);
-INSERT INTO Athlete VALUES(21, 'Hudson', 'Marlene', 'Canada', 20);
-INSERT INTO Athlete VALUES(22, 'West', 'North', 'China', NULL);
-INSERT INTO Athlete VALUES(23, 'Philips', 'Michael', 'China', 22);
-INSERT INTO Athlete VALUES(24, 'Muscle', 'Uncle', 'China', 22);
-INSERT INTO Athlete VALUES(25, 'Lee', 'Bryce', 'China', 24);
-INSERT INTO Athlete VALUES(26, 'Hoke', 'Brady', 'United States', 10);
-INSERT INTO Athlete VALUES(27, 'Seger', 'Bill', 'United States', 11);
-INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN', 'Thailand', NULL);
-INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick', 'Italy', NULL);
-INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James', 'France', NULL);
---
+INSERT INTO Athlete VALUES(10, 'OBrien', 'John');
+INSERT INTO Athlete VALUES(11, 'OBrien', 'Jack');
+INSERT INTO Athlete VALUES(12, 'Hughes', 'Marcus');
+INSERT INTO Athlete VALUES(13, 'Keel', 'Travis');
+INSERT INTO Athlete VALUES(14, 'Ramic', 'Alen');
+INSERT INTO Athlete VALUES(15, 'Kelch', 'Daniel');
+INSERT INTO Athlete VALUES(16, 'Springus', 'Harold');
+INSERT INTO Athlete VALUES(17, 'Hawthorne', 'Gerald');
+INSERT INTO Athlete VALUES(18, 'Front', 'Rosemary');
+INSERT INTO Athlete VALUES(19, 'Tennis', 'Tim');
+INSERT INTO Athlete VALUES(20, 'Robertson', 'Robert');
+INSERT INTO Athlete VALUES(21, 'Hudson', 'Marlene');
+INSERT INTO Athlete VALUES(22, 'West', 'North');
+INSERT INTO Athlete VALUES(23, 'Philips', 'Michael');
+INSERT INTO Athlete VALUES(24, 'Muscle', 'Uncle');
+INSERT INTO Athlete VALUES(25, 'Lee', 'Bryce');
+INSERT INTO Athlete VALUES(26, 'Hoke', 'Brady');
+INSERT INTO Athlete VALUES(27, 'Seger', 'Bill');
+INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN');
+INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick');
+INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
+
 INSERT INTO Spectator VALUES(100, 'Miller', 'John', 'United States');
 INSERT INTO Spectator VALUES(101, 'Sanches', 'Aguero', 'Argentina');
 INSERT INTO Spectator VALUES(102, 'Lee', 'Wong', 'China');
@@ -244,6 +238,14 @@ INSERT INTO Spectator VALUES(112, 'Uccello', 'Fabio', 'Italy');
 INSERT INTO Spectator VALUES(113, 'Fabregas', 'Iniesta', 'Spain');
 INSERT INTO Spectator VALUES(114, 'Measho', 'Micheal', 'Ethiopia');
 INSERT INTO Spectator VALUES(115, 'Christiano', 'Ronaldo', 'Portugal');
+INSERT INTO Spectator VALUES(116, 'Kriplani', 'Mehmenal', 'India');
+INSERT INTO Spectator VALUES(117, 'Rastip', 'Shahimteg', 'India');
+INSERT INTO Spectator VALUES(118, 'Mahood', 'Melket', 'India');
+INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
+INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
+INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
+
+
 --
 SET FEEDBACK ON
 COMMIT;
@@ -289,6 +291,13 @@ WHERE S1. eid > 3 AND
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
+-- ------------------------------------
+-- Correlated subquery
+-- ------------------------------------
+--
+SELECT *, 
+Event E
+--correlated subquery 
 SELECT E.eid, E.event_date
 FROM Event E
 WHERE  
@@ -296,6 +305,12 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
+-- ------------------------------------
+-- Non-correlated subquery
+-- ------------------------------------
+--
+SELECT *, 
+-- non-correlated subquery
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
@@ -324,4 +339,16 @@ WHERE NOT EXISTS((SELECT E.eid
 				    WHERE C.aid = A.aid AND
 						  C.eid = E.eid AND
 						  E.eid = 4)));
+						
+--------------------------------------
+--  GROUP BY ----
+--------------------------------------
+Select S.country, COUNT(*)
+from Spectator s, Country c
+Where c.population > 300,000,000
+Group By S.country
+Having count(*) > 3;
+
+
+
 SPOOL OFF
