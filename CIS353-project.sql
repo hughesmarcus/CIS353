@@ -114,6 +114,7 @@ cname CHAR(35) NOT NULL;
 CONSTRAINT SPC1 PRIMARY KEY (sid),
 CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
 );
+--
 -- ------------------------------------
 -- Ticket table
 -- ------------------------------------
@@ -138,6 +139,10 @@ CONSTRAINT TC3 FOREIGN KEY (sid) REFERENCES Spectator(sid)
 --
 SET AUTOCOMMIT OFF
 SET FEEDBACK OFF
+---
+-- ------------------------------------
+-- Populate the tables here
+-- ------------------------------------
 --
 INSERT INTO Event VALUES (1, '06-AUG-16',987, 'Basketball');
 INSERT INTO Event VALUES (2, '08-AUG-16', 67, 'Handball');
@@ -194,38 +199,37 @@ INSERT INTO Country VALUES('Sweden',9728498 );
 INSERT INTO Country VALUES('Belgium',11225469);
 INSERT INTO Country VALUES('Ghana' , 27043093);
 --
-INSERT INTO Athlete VALUES(10, 'OBrien', 'John');
-INSERT INTO Athlete VALUES(11, 'OBrien', 'Jack');
-INSERT INTO Athlete VALUES(12, 'Hughes', 'Marcus');
-INSERT INTO Athlete VALUES(13, 'Keel', 'Travis');
-INSERT INTO Athlete VALUES(14, 'Ramic', 'Alen');
-INSERT INTO Athlete VALUES(15, 'Kelch', 'Daniel');
-INSERT INTO Athlete VALUES(16, 'Springus', 'Harold');
-INSERT INTO Athlete VALUES(17, 'Hawthorne', 'Gerald');
-INSERT INTO Athlete VALUES(18, 'Front', 'Rosemary');
-INSERT INTO Athlete VALUES(19, 'Tennis', 'Tim');
-INSERT INTO Athlete VALUES(20, 'Robertson', 'Robert');
-INSERT INTO Athlete VALUES(21, 'Hudson', 'Marlene');
-INSERT INTO Athlete VALUES(22, 'West', 'North');
-INSERT INTO Athlete VALUES(23, 'Philips', 'Michael');
-INSERT INTO Athlete VALUES(24, 'Muscle', 'Uncle');
-INSERT INTO Athlete VALUES(25, 'Lee', 'Bryce');
-INSERT INTO Athlete VALUES(26, 'Hoke', 'Brady');
-INSERT INTO Athlete VALUES(27, 'Seger', 'Bill');
-INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN');
-INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick');
-INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James');
+INSERT INTO Athlete VALUES(10, 'OBrien', 'John', 'United States', NULL);
+INSERT INTO Athlete VALUES(11, 'OBrien', 'Jack', 'United States', 10);
+INSERT INTO Athlete VALUES(12, 'Hughes', 'Marcus', 'Germany', 15);
+INSERT INTO Athlete VALUES(13, 'Keel', 'Travis', 'Germany', 12);
+INSERT INTO Athlete VALUES(14, 'Ramic', 'Alen', 'Germany', 15);
+INSERT INTO Athlete VALUES(15, 'Kelch', 'Daniel', 'Germany', NULL);
+INSERT INTO Athlete VALUES(16, 'Springus', 'Harold', 'Russia', NULL);
+INSERT INTO Athlete VALUES(17, 'Hawthorne', 'Gerald', 'Russia', 16);
+INSERT INTO Athlete VALUES(18, 'Front', 'Rosemary', 'Russia', 17);
+INSERT INTO Athlete VALUES(19, 'Tennis', 'Tim', 'Canada', NULL);
+INSERT INTO Athlete VALUES(20, 'Robertson', 'Robert', 'Canada', 19);
+INSERT INTO Athlete VALUES(21, 'Hudson', 'Marlene', 'Canada', 20);
+INSERT INTO Athlete VALUES(22, 'West', 'North', 'China', NULL);
+INSERT INTO Athlete VALUES(23, 'Philips', 'Michael', 'China', 22);
+INSERT INTO Athlete VALUES(24, 'Muscle', 'Uncle', 'China', 22);
+INSERT INTO Athlete VALUES(25, 'Lee', 'Bryce', 'China', 24);
+INSERT INTO Athlete VALUES(26, 'Hoke', 'Brady', 'United States', 10);
+INSERT INTO Athlete VALUES(27, 'Seger', 'Bill', 'United States', 11);
+INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN', 'Thailand', NULL);
+INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick', 'Italy', NULL);
+INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James', 'France', NULL);
 --
 SET FEEDBACK ON
 COMMIT;
--- ------------------------------------
---SELECT DISTINCT S.fname, A.fname
---From Spectator S, Athlete A, Event E, Country C, Ticket T
---WHERE 
 --
---$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
---***********--QUERIES--*************--
---$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$--
+-- ------------------------------------
+-- -----------QUERIES BELOW------------
+-- ------------------------------------
+-- Marcus, your queries don't work.---- 
+-- At all. ----------------------------
+--
 SELECT * FROM Event;
 SELECT * FROM Athlete;
 SELECT * FROM Country; 
@@ -239,8 +243,11 @@ SELECT * FROM Event;
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
 --
---Returns a list of countries with higher
---than average populations.
+-- ------------------------------------
+-- Uses MINUS and AVG, returns the
+-- countries with above avg population
+-- ------------------------------------
+--
 SELECT C.cname, C.population
 FROM Country C
 MINUS
@@ -248,13 +255,22 @@ SELECT C.cname, C.population
 FROM Country C
 WHERE C.population < (SELECT AVG(C.population) FROM Country C);
 --
--- Self Join 
+-- ------------------------------------
+-- Self Join
+-- ------------------------------------
+--
 SELECT S1.eid, S2.eid 
 FROM Sponsors S1, Sponsors S2
 WHERE S1. eid > 3 AND 
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
+-- ------------------------------------
+-- Correlated subquery
+-- ------------------------------------
+--
+SELECT *, 
+Event E
 --correlated subquery 
 SELECT E.eid, E.event_date
 FROM Event E
@@ -263,17 +279,29 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
+-- ------------------------------------
+-- Non-correlated subquery
+-- ------------------------------------
+--
+SELECT *, 
 -- non-correlated subquery
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
-	E.eid NOT IN ( SELECT *
+	E.eid NOT IN ( SELECT S.eid
 	FROM  Sponsors S);
 --
---LEFT OUTER JOIN 
+-- ------------------------------------
+-- Marcus made this
+-- ------------------------------------
+--
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
-	FROM TICKET T LEFT OUTER JOIN EVENTS E ON T.eid = E.eid;
-------Divisional Subquery---------
+	FROM TICKET T LEFT OUTER JOIN EVENT E ON T.eid = E.eid;
+--
+-- ------------------------------------
+-- Divisional Subquery
+-- ------------------------------------
+--
 SELECT A.aid, A.country, A.lname
 FROM Athlete A
 WHERE NOT EXISTS((SELECT E.eid
@@ -284,5 +312,5 @@ WHERE NOT EXISTS((SELECT E.eid
 				    FROM Event E, CompetesIn C
 				    WHERE C.aid = A.aid AND
 						  C.eid = E.eid AND
-						  E.eid = 4));
+						  E.eid = 4)));
 SPOOL OFF
