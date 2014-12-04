@@ -456,6 +456,7 @@ WHERE T.sid = S.sid AND
 --
 -- TEST CONSTRAINTS
 --
+SET AUTOCOMMIT ON
 -- ------------------------------------
 -- Country Test
 -- ------------------------------------
@@ -478,7 +479,20 @@ INSERT INTO Event VALUES (2222, '8-JAN-16', 2, 'S');
 INSERT INTO Sponsors VALUES (1, 'Microsoft');
 INSERT INTO Sponsors VALUES (1, 'Apple');
 INSERT INTO Sponsors VALUES (99999, 'Anything');
+SELECT S.eid 
+FROM Sponsors S
+WHERE S.eid = 1;
 DELETE FROM Event
 WHERE eid = 1;
+SELECT S.eid 
+FROM Sponsors S
+WHERE S.eid = 1;
+--
+-- ------------------------------------
+-- Athlete Test
+-- ------------------------------------
+INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10);
+INSERT INTO Athlete VALUES(9231, 't', 't', 'made up', 10);
+INSERT INTO Athlete VALUES(123123, 'q', 'w', 'South Africa', 9999912);
 --
 SPOOL OFF
