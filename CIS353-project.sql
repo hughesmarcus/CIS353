@@ -468,36 +468,50 @@ WHERE T.sid = S.sid AND
 		E.eid = CI.eid AND
 		S.cname = A.country;
 --
+-- ========================================================
 -- TEST CONSTRAINTS
+-- ========================================================
 --
 SET AUTOCOMMIT ON
 -- --------------------------------------------------------
 -- Country Test
 -- --------------------------------------------------------
+-- Tests CC1
 INSERT INTO Country VALUES ('United States', 2);
+-- Tests CC2
 INSERT INTO Country VALUES ('Just a test', -2);
+-- Tests CC2 (should pass)
 INSERT INTO Country VALUES ('THIS SHOULD WORK', 0);
 --
 -- --------------------------------------------------------
 -- Event Test
 -- --------------------------------------------------------
+-- Tests EC1
 INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport');
+-- Tests EC2
 INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport');
+-- Tests EC3
 INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport');
+-- Tests EC3
 INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S');
+-- Tests EC3
 INSERT INTO Event VALUES (2222, '8-JAN-16', 2, 'S');
 --
 -- --------------------------------------------------------
 -- Sponsors Test
 -- --------------------------------------------------------
+-- Tests SC1
 INSERT INTO Sponsors VALUES (1, 'Microsoft');
+-- Tests SC1
 INSERT INTO Sponsors VALUES (1, 'Apple');
+-- Tests SC2
 INSERT INTO Sponsors VALUES (99999, 'Anything');
 SELECT S.eid 
 FROM Sponsors S
 WHERE S.eid = 1;
 DELETE FROM Event
 WHERE eid = 1;
+-- Tests SC2
 SELECT S.eid 
 FROM Sponsors S
 WHERE S.eid = 1;
@@ -505,29 +519,44 @@ WHERE S.eid = 1;
 -- --------------------------------------------------------
 -- Athlete Test
 -- --------------------------------------------------------
+-- Test AC1
 INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10);
+-- Test AC3
 INSERT INTO Athlete VALUES(9231, 't', 't', 'made up', 10);
+-- Test AC2
 INSERT INTO Athlete VALUES(123123, 'q', 'w', 'South Africa', 9999912);
 -- ---------------------------------------------------------
 -- CompetesIn Test
 -- ---------------------------------------------------------
-INSERT INTO CompetesIn VALUES (14, 30 , 'mike');
+-- Test CIC2
+INSERT INTO CompetesIn VALUES (94, 30 , 'lol');
+-- Test CIC1
 INSERT INTO CompetesIn VALUES (14, 31 , 'none');
-INSERT INTO CompetesIn VALUES (66, 29, 'jack');
+-- Test CIC3
+INSERT INTO CompetesIn VALUES (66, 29, 'gold');
+-- Test CIC4
+INSERT INTO CompetesIn VALUES (1, 1241241, 'gold');
 --
 -- --------------------------------------------------------
 -- Spectator Test
 -- --------------------------------------------------------
+-- Tests SPC1
 INSERT INTO Spectator VALUES (100, 'l', 'f', 'United States');
+-- Tests SPC3
 INSERT INTO Spectator VALUES (1, 'joe', 'cool', 'NOT A COUNTRYIES');
 --
 -- --------------------------------------------------------
 -- Ticket Test
 -- --------------------------------------------------------
+-- Tests TC1
 INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100); 
+-- Tests TC2
 INSERT INTO Ticket VALUES(1, 1, 200000, 1, 100);
+-- Tests TC4
 INSERT INTO Ticket VALUES(99, 1, 1, 1, 100);
+-- Tests TC2
 INSERT INTO Ticket VALUES(1, 1, 30000, 84717, 100);
+-- Tests TC3
 INSERT INTO Ticket VALUES(99, 1, 2231, 2, 87482);
 --
 SPOOL OFF
