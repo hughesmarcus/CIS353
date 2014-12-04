@@ -9,7 +9,6 @@ CIS 353 - Database Design Project
    Alen Ramic
 **************************************/
 --
-SET FEEDBACK OFF
 DROP TABLE Sponsors CASCADE CONSTRAINT;
 DROP TABLE Event CASCADE CONSTRAINT;
 DROP TABLE Athlete CASCADE CONSTRAINT;
@@ -355,7 +354,7 @@ WHERE C.population > 300000000 AND
 C.cname = S.cname
 GROUP BY S.cname
 HAVING COUNT(*) > 3;
-
-
-
+--
+-- TEST CONSTRAINTS
+--
 SPOOL OFF
