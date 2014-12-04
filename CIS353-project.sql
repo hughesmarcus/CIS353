@@ -108,14 +108,10 @@ CREATE TABLE Spectator
 sid INTEGER,
 lname CHAR(30) NOT NULL,
 fname CHAR(30) NOT NULL,
---tnum INTEGER NOT NULL,
---eid INTEGER NOT NULL,
 cname CHAR(35) NOT NULL;
 --
 --
 CONSTRAINT SPC1 PRIMARY KEY (sid),
-CONSTRAINT SPC2 FOREIGN KEY (tnum) REFERENCES Ticket(ticket_number),
-CONSTRAINT SPC3 FOREIGN KEY (eid) REFERENCES Ticket(eid),
 CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
 );
 -- ------------------------------------
@@ -130,7 +126,7 @@ price INTEGER,
 eid INTEGER,
 sid INTEGER,
 --
-CONSTRAINT TC1 PRIMARY KEY (eid, sid, ticket_number),
+CONSTRAINT TC1 PRIMARY KEY (eid, ticket_number),
 CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
 	ON DELETE CASCADE
     	DEFERRABLE INITIALLY DEFERRED,
