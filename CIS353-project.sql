@@ -16,6 +16,7 @@ DROP TABLE Athlete;
 DROP TABLE Spectator;
 DROP TABLE Ticket;
 DROP TABLE Country;
+DROP TABLE CompetesIn;
 --
 -- ------------------------------------
 -- Event table
@@ -107,8 +108,8 @@ CREATE TABLE Spectator
 sid INTEGER,
 lname CHAR(30) NOT NULL,
 fname CHAR(30) NOT NULL,
-tnum INTEGER NOT NULL,
-eid INTEGER NOT NULL,
+--tnum INTEGER NOT NULL,
+--eid INTEGER NOT NULL,
 cname CHAR(35) NOT NULL;
 --
 --
@@ -128,11 +129,15 @@ ticket_number INTEGER,
 section_number INTEGER,
 price INTEGER,
 eid INTEGER,
+sid INTEGER,
 --
-CONSTRAINT TC1 PRIMARY KEY (eid, ticket_number),
+CONSTRAINT TC1 PRIMARY KEY (eid, sid, ticket_number),
 CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
-    ON DELETE CASCADE
-    DEFERRABLE INITIALLY DEFERRED
+	ON DELETE CASCADE
+    	DEFERRABLE INITIALLY DEFERRED,
+CONSTRAINT TC3 FOREIGN KEY (sid) REFERENCES Spectator(sid)
+	ON DELETE CASCADE
+	DEFERRABLE INITIALLY DEFERRED
 --
 );
 --
@@ -143,22 +148,22 @@ SET FEEDBACK OFF
 -- Populate the tables here
 -- ------------------------------------
 --
-INSERT INTO Event VALUES (1, '06-AUG-16',987);
-INSERT INTO Event VALUES (2, '08-AUG-16', 67);
-INSERT INTO Event VALUES (3, '13-AUG-16', 5);
-INSERT INTO Event VALUES (4, '21-AUG-16', 30);
-INSERT INTO Event VALUES (5, '07-AUG-16',254);
-INSERT INTO Event VALUES (6, '09-AUG-16', 670);
-INSERT INTO Event VALUES (7, '11-AUG-16', 51);
-INSERT INTO Event VALUES (8, '11-AUG-16', 0);
-INSERT INTO Event VALUES (9, '11-AUG-16', 87);
-INSERT INTO Event VALUES (10, '21-AUG-16', 67);
-INSERT INTO Event VALUES (11, '15-AUG-16', 9000);
-INSERT INTO Event VALUES (12, '16-AUG-16', 0007);
-INSERT INTO Event VALUES (13, '17-AUG-16', 21);
-INSERT INTO Event VALUES (14, '18-AUG-16', 781);
-INSERT INTO Event VALUES (15, '19-AUG-16', 19);
-INSERT INTO Event VALUES (16, '20-AUG-16', 20);
+INSERT INTO Event VALUES (1, '06-AUG-16',987, 'Basketball');
+INSERT INTO Event VALUES (2, '08-AUG-16', 67, 'Handball');
+INSERT INTO Event VALUES (3, '13-AUG-16', 5, 'Water Polo');
+INSERT INTO Event VALUES (4, '21-AUG-16', 30, 'Volleyball');
+INSERT INTO Event VALUES (5, '07-AUG-16',254, 'Synchronized Swimming');
+INSERT INTO Event VALUES (6, '09-AUG-16', 670, 'Rowing');
+INSERT INTO Event VALUES (7, '11-AUG-16', 51, 'Judo');
+INSERT INTO Event VALUES (8, '11-AUG-16', 0. 'Football');
+INSERT INTO Event VALUES (9, '11-AUG-16', 87, 'Cycling Road');
+INSERT INTO Event VALUES (10, '21-AUG-16', 67, 'Tennis');
+INSERT INTO Event VALUES (11, '15-AUG-16', 9000, 'Golf');
+INSERT INTO Event VALUES (12, '16-AUG-16', 0007, 'Diving');
+INSERT INTO Event VALUES (13, '17-AUG-16', 21, 'Boxing');
+INSERT INTO Event VALUES (14, '18-AUG-16', 781, 'Shooting');
+INSERT INTO Event VALUES (15, '19-AUG-16', 19, 'Table Tennis');
+INSERT INTO Event VALUES (16, '20-AUG-16', 20, 'Fencing');
 --
 INSERT INTO Country VALUES('United States', 319134000);
 INSERT INTO Country VALUES('China', 1368030000 );
@@ -230,6 +235,15 @@ COMMIT;
 -- At all. ----------------------------
 --
 SELECT * FROM Event;
+SELECT * FROM Athlete;
+SELECT * FROM Country; 
+SELECT * FROM Spectator;
+SELECT * FROM Ticket;
+SELECT * FROM Sponsors;
+SELECT * FROM CompetesIn;
+SELECT * FROM Event;
+--
+--
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
 --
@@ -261,6 +275,9 @@ S1.eid < S2.eid ;
 --
 SELECT *, 
 Event E
+--correlated subquery 
+SELECT E.eid, E.event_date
+FROM Event E
 WHERE  
 	NOT EXISTS ( SELECT *
 	FROM  Sponsors S
@@ -271,6 +288,8 @@ WHERE
 -- ------------------------------------
 --
 SELECT *, 
+-- non-correlated subquery
+SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
 	E.eid NOT IN ( SELECT *
