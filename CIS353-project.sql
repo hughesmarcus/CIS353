@@ -313,7 +313,6 @@ WHERE
 -- Non-correlated subquery
 -- ------------------------------------
 --
--- non-correlated subquery
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
@@ -331,18 +330,17 @@ SELECT T.eid , T.ticket_number , E.eid , E.event_date
 -- Divisional Subquery
 -- ------------------------------------
 --
-SELECT A.aid, A.country, A.lname
-FROM Athlete A
+SELECT S.sid, S.lname
+FROM Spectator S
 WHERE NOT EXISTS((SELECT E.eid
-				   FROM Event E
-				   WHERE E.eid = 4
-				   MINUS
-				   (SELECT E.Sport
-				    FROM Event E, CompetesIn C
-				    WHERE C.aid = A.aid AND
-						  C.eid = E.eid AND
-						  E.eid = 4)));
-						
+				  FROM Event E
+				  WHERE E.eid = 1)
+				  MINUS
+				  (SELECT E.eid
+				   FROM Ticket T, Event E
+				   WHERE T.sid = S.sid AND
+						 T.eid = E.eid AND
+						 E.eid = 1));
 --------------------------------------
 --  GROUP BY ----
 --------------------------------------
@@ -351,7 +349,18 @@ FROM Spectator S, Country C
 WHERE C.population > 300000000 AND
 C.cname = S.cname
 GROUP BY S.cname
-HAVING COUNT(*) > 3;
+HAVING COUNT(*) > 3
+ORDER BY COUNT(*);
+--------------------------------------
+--  Join Involving 4 relations ----
+--------------------------------------
+SELECT S.fname, A.fname
+FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
+WHERE T.sid = S.sid AND
+		T.sid = E.eid AND
+		A.aid = CI.aid AND
+		E.eid = E.eid AND
+		S.cname = A.country;
 --
 -- TEST CONSTRAINTS
 --
