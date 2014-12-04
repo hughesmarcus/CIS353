@@ -29,9 +29,9 @@ CONSTRAINT CC1 PRIMARY KEY (cname),
 CONSTRAINT CC2 CHECK (population >= 0)
 );
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Event table
--- ------------------------------------
+-- --------------------------------------------------------
 -- 
 CREATE TABLE Event
 (
@@ -49,9 +49,9 @@ CONSTRAINT EC2 CHECK (empty_seats <= 10000 AND empty_seats >= 0),
 CONSTRAINT EC3 CHECK(TO_CHAR(event_date, 'YYYY-MM-DD') >= '2016-08-05' AND TO_CHAR(event_date, 'YYYY-MM-DD') <= '2016-08-21')
 );
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Sponsors table
--- ------------------------------------
+-- --------------------------------------------------------
 --
 CREATE TABLE Sponsors
 (
@@ -67,9 +67,9 @@ CONSTRAINT SC2 FOREIGN KEY (eid) REFERENCES Event(eid)
     DEFERRABLE INITIALLY DEFERRED
 );
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Athlete table
--- ------------------------------------
+-- --------------------------------------------------------
 --
 CREATE TABLE Athlete
 (
@@ -106,9 +106,9 @@ CONSTRAINT CIC4 FOREIGN KEY (aid) REFERENCES Athlete(aid)
 );
 --
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Spectator table
--- ------------------------------------
+-- --------------------------------------------------------
 --
 CREATE TABLE Spectator
 (
@@ -124,9 +124,9 @@ CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
 	DEFERRABLE INITIALLY DEFERRED
 );
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Ticket table
--- ------------------------------------
+-- --------------------------------------------------------
 --
 CREATE TABLE Ticket
 (
@@ -150,9 +150,9 @@ CONSTRAINT TC4 CHECK(price >= 100/section_number)
 SET AUTOCOMMIT OFF
 SET FEEDBACK OFF
 ---
--- ------------------------------------
+-- --------------------------------------------------------
 -- Populate the tables here
--- ------------------------------------
+-- --------------------------------------------------------
 --
 INSERT INTO Event VALUES (1, '06-AUG-16',987, 'Basketball');
 INSERT INTO Event VALUES (2, '08-AUG-16', 67, 'Handball');
@@ -354,8 +354,6 @@ INSERT INTO CompetesIn VALUES (14, 30 , 'none');
 SET FEEDBACK ON
 COMMIT;
 --
--- ------------------------------------
--- -----------QUERIES BELOW------------
 --
 SELECT * FROM Event;
 SELECT * FROM Athlete;
@@ -365,15 +363,22 @@ SELECT * FROM Ticket;
 SELECT * FROM Sponsors;
 SELECT * FROM CompetesIn;
 --
+-- ========================================================
+-- QUERIES
+-- ========================================================
 --
+-- --------------------------------------------------------
+-- - Q1 - 
+-- Selects all countries with a population
+-- that is greater than 100,000,000
+-- --------------------------------------------------------
 SELECT C.cname FROM Country C
 WHERE C.population > 100000000;
 --
--- ------------------------------------
--- Uses MINUS and AVG, returns the
--- countries with above avg population
--- ------------------------------------
---
+-- --------------------------------------------------------
+-- - Q2 - AVG, MINUS, Correlated subquery
+-- Selects all countries with above avg population
+-- --------------------------------------------------------
 SELECT C.cname, C.population
 FROM Country C
 MINUS
@@ -381,19 +386,19 @@ SELECT C.cname, C.population
 FROM Country C
 WHERE C.population < (SELECT AVG(C.population) FROM Country C);
 --
--- ------------------------------------
--- Self Join
--- ------------------------------------
---
+-- --------------------------------------------------------
+-- - Q3 - Self Join
+-- Selects two sponsors
+-- --------------------------------------------------------
 SELECT S1.eid, S2.eid 
 FROM Sponsors S1, Sponsors S2
-WHERE S1. eid > 3 AND 
+WHERE S1.eid > 3 AND 
 S1.sponsor_name = S2.sponsor_name AND
 S1.eid < S2.eid ;
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Correlated subquery
--- ------------------------------------
+-- --------------------------------------------------------
 --
 SELECT E.eid, E.event_date
 FROM Event E
@@ -402,9 +407,9 @@ WHERE
 	FROM  Sponsors S
 	WHERE E.eid = S.eid);
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Non-correlated subquery
--- ------------------------------------
+-- --------------------------------------------------------
 --
 SELECT E.eid,  E.event_date
 FROM Event E
@@ -412,16 +417,16 @@ WHERE
 	E.eid NOT IN ( SELECT S.eid
 	FROM  Sponsors S);
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Marcus made this
--- ------------------------------------
+-- --------------------------------------------------------
 --
 SELECT T.eid , T.ticket_number , E.eid , E.event_date
 	FROM Ticket T LEFT OUTER JOIN Event E ON T.eid = E.eid;
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Divisional Subquery
--- ------------------------------------
+-- --------------------------------------------------------
 --
 SELECT S.sid, S.lname
 FROM Spectator S
@@ -434,9 +439,9 @@ WHERE NOT EXISTS((SELECT E.eid
 				   WHERE T.sid = S.sid AND
 						 T.eid = E.eid AND
 						 E.eid = 1));
---------------------------------------
+-----------------------------------------------------------
 --  GROUP BY ----
---------------------------------------
+--------------------------------------------------------
 Select S.cname, COUNT(*)
 FROM Spectator S, Country C
 WHERE C.population > 300000000 AND
@@ -444,9 +449,9 @@ C.cname = S.cname
 GROUP BY S.cname
 HAVING COUNT(*) > 3
 ORDER BY COUNT(*);
---------------------------------------
+----------------------------------------------------------
 --  Join Involving 4 relations ----
---------------------------------------
+----------------------------------------------------------
 SELECT DISTINCT S.fname, A.fname
 FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
 WHERE T.sid = S.sid AND
@@ -458,25 +463,25 @@ WHERE T.sid = S.sid AND
 -- TEST CONSTRAINTS
 --
 SET AUTOCOMMIT ON
--- ------------------------------------
+-- --------------------------------------------------------
 -- Country Test
--- ------------------------------------
+-- --------------------------------------------------------
 INSERT INTO Country VALUES ('United States', 2);
 INSERT INTO Country VALUES ('Just a test', -2);
 INSERT INTO Country VALUES ('THIS SHOULD WORK', 0);
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Event Test
--- ------------------------------------
+-- --------------------------------------------------------
 INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport');
 INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport');
 INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport');
 INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S');
 INSERT INTO Event VALUES (2222, '8-JAN-16', 2, 'S');
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Sponsors Test
--- ------------------------------------
+-- --------------------------------------------------------
 INSERT INTO Sponsors VALUES (1, 'Microsoft');
 INSERT INTO Sponsors VALUES (1, 'Apple');
 INSERT INTO Sponsors VALUES (99999, 'Anything');
@@ -489,28 +494,28 @@ SELECT S.eid
 FROM Sponsors S
 WHERE S.eid = 1;
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Athlete Test
--- ------------------------------------
+-- --------------------------------------------------------
 INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10);
 INSERT INTO Athlete VALUES(9231, 't', 't', 'made up', 10);
 INSERT INTO Athlete VALUES(123123, 'q', 'w', 'South Africa', 9999912);
--- -------------------------------------
+-- ---------------------------------------------------------
 -- CompetesIn Test
--- -------------------------------------
+-- ---------------------------------------------------------
 INSERT INTO CompetesIn VALUES (14, 30 , 'mike');
 INSERT INTO CompetesIn VALUES (14, 31 , 'none');
 INSERT INTO CompetesIn VALUES (66, 29, 'jack');
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Spectator Test
--- ------------------------------------
+-- --------------------------------------------------------
 INSERT INTO Spectator VALUES (100, 'l', 'f', 'United States');
 INSERT INTO Spectator VALUES (1, 'joe', 'cool', 'NOT A COUNTRYIES');
 --
--- ------------------------------------
+-- --------------------------------------------------------
 -- Ticket Test
--- ------------------------------------
+-- --------------------------------------------------------
 INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100); 
 INSERT INTO Ticket VALUES(1, 1, 200000, 1, 100);
 INSERT INTO Ticket VALUES(99, 1, 1, 1, 100);
