@@ -267,7 +267,7 @@ WHERE
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
-	E.eid NOT IN ( SELECT *
+	E.eid NOT IN ( SELECT S.eid
 	FROM  Sponsors S);
 --
 --LEFT OUTER JOIN 
