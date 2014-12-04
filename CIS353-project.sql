@@ -253,49 +253,79 @@ INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
 INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
 INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
 --
-INSERT INTO Tickets VALUES ( 1 , 1, 120 , 1 , 100); 
-INSERT INTO Tickets VALUES (2, 1, 119, 2 , 101);
-INSERT INTO Tickets VALUES (3, 1, 118, 3 , 102);
-INSERT INTO Tickets VALUES (4, 1, 117, 4 , 103);
-INSERT INTO Tickets VALUES (5, 1, 116, 5 , 104);
-INSERT INTO Tickets VALUES (6, 1, 115, 6 , 105);
-INSERT INTO Tickets VALUES (7, 1, 114, 7 , 106);
-INSERT INTO Tickets VALUES (8, 1, 113, 8 , 107);
-INSERT INTO Tickets VALUES (9, 1, 112, 9 , 108);
-INSERT INTO Tickets VALUES (10 , 1, 111 , 10 , 109); 
-INSERT INTO Tickets VALUES (11, 1, 110, 11 , 110);
-INSERT INTO Tickets VALUES 12, 1, 109, 12, 111);
-INSERT INTO Tickets VALUES (13, 1, 108, 13 , 112);
-INSERT INTO Tickets VALUES (14, 1, 107, 14 , 113);
-INSERT INTO Tickets VALUES (15, 1, 100, 15 , 114);
-INSERT INTO Tickets VALUES (16, 1, 120, 16 , 115);
-INSERT INTO Tickets VALUES ( 17 , 2, 120 , 1 , 100); 
-INSERT INTO Tickets VALUES (18, 3, 119, 2 , 101);
-INSERT INTO Tickets VALUES (19, 3, 118, 3 , 102);
-INSERT INTO Tickets VALUES (20, 4, 117, 4 , 103);
-INSERT INTO Tickets VALUES (21, 3, 116, 5 , 104);
-INSERT INTO Tickets VALUES (22, 2, 115, 6 , 105);
-INSERT INTO Tickets VALUES (23, 1, 114, 7 , 106);
-INSERT INTO Tickets VALUES (24, 3, 113, 8 , 107);
-INSERT INTO Tickets VALUES (25, 4, 112, 9 , 108);
-INSERT INTO Tickets VALUES (26 , 2, 111 , 10 , 109); 
-INSERT INTO Tickets VALUES (27, 2, 110, 11 , 110);
-INSERT INTO Tickets VALUES (28, 3, 109, 12, 111);
-INSERT INTO Tickets VALUES (29, 4, 25, 13 , 112);
-INSERT INTO Tickets VALUES (30, 5, 30, 14 , 113);
-INSERT INTO Tickets VALUES (31, 2, 100, 15 , 114);
-INSERT INTO Tickets VALUES (32, 1, 120, 16 , 115);
-INSERT INTO Tickets VALUES (33 , 1 , 100 , 10 , 121);
-INSERT INTO Tickets VALUES (34, 1, 114, 7 , 117);
-INSERT INTO Tickets VALUES (35, 3, 113, 8 , 118);
-INSERT INTO Tickets VALUES (36, 4, 112, 9 , 119);
-INSERT INTO Tickets VALUES (37 , 2, 111 , 10 , 120); 
-INSERT INTO Tickets VALUES (38, 2, 110, 11 , 117);
-INSERT INTO Tickets VALUES (39, 3, 109, 12, 118);
-INSERT INTO Tickets VALUES (40, 4, 25, 13 , 119);
-INSERT INTO Tickets VALUES (41, 5, 30, 14 , 120);
-INSERT INTO Tickets VALUES (44 , 1 , 100 , 10 , 121);
+INSERT INTO Ticket VALUES ( 1 , 1, 120 , 1 , 100); 
+INSERT INTO Ticket VALUES (2, 1, 119, 2 , 101);
+INSERT INTO Ticket VALUES (3, 1, 118, 3 , 102);
+INSERT INTO Ticket VALUES (4, 1, 117, 4 , 103);
+INSERT INTO Ticket VALUES (5, 1, 116, 5 , 104);
+INSERT INTO Ticket VALUES (6, 1, 115, 6 , 105);
+INSERT INTO Ticket VALUES (7, 1, 114, 7 , 106);
+INSERT INTO Ticket VALUES (8, 1, 113, 8 , 107);
+INSERT INTO Ticket VALUES (9, 1, 112, 9 , 108);
+INSERT INTO Ticket VALUES (10 , 1, 111 , 10 , 109); 
+INSERT INTO Ticket VALUES (11, 1, 110, 11 , 110);
+INSERT INTO Ticket VALUES 12, 1, 109, 12, 111);
+INSERT INTO Ticket VALUES (13, 1, 108, 13 , 112);
+INSERT INTO Ticket VALUES (14, 1, 107, 14 , 113);
+INSERT INTO Ticket VALUES (15, 1, 100, 15 , 114);
+INSERT INTO Ticket VALUES (16, 1, 120, 16 , 115);
+INSERT INTO Ticket VALUES ( 17 , 2, 120 , 1 , 100); 
+INSERT INTO Ticket VALUES (18, 3, 119, 2 , 101);
+INSERT INTO Ticket VALUES (19, 3, 118, 3 , 102);
+INSERT INTO Ticket VALUES (20, 4, 117, 4 , 103);
+INSERT INTO Ticket VALUES (21, 3, 116, 5 , 104);
+INSERT INTO Ticket VALUES (22, 2, 115, 6 , 105);
+INSERT INTO Ticket VALUES (23, 1, 114, 7 , 106);
+INSERT INTO Ticket VALUES (24, 3, 113, 8 , 107);
+INSERT INTO Ticket VALUES (25, 4, 112, 9 , 108);
+INSERT INTO Ticket VALUES (26 , 2, 111 , 10 , 109); 
+INSERT INTO Ticket VALUES (27, 2, 110, 11 , 110);
+INSERT INTO Ticket VALUES (28, 3, 109, 12, 111);
+INSERT INTO Ticket VALUES (29, 4, 25, 13 , 112);
+INSERT INTO Ticket VALUES (30, 5, 30, 14 , 113);
+INSERT INTO Ticket VALUES (31, 2, 100, 15 , 114);
+INSERT INTO Ticket VALUES (32, 1, 120, 16 , 115);
+INSERT INTO Ticket VALUES (33 , 1 , 100 , 10 , 121);
+INSERT INTO Ticket VALUES (34, 1, 114, 7 , 117);
+INSERT INTO Ticket VALUES (35, 3, 113, 8 , 118);
+INSERT INTO Ticket VALUES (36, 4, 112, 9 , 119);
+INSERT INTO Ticket VALUES (37 , 2, 111 , 10 , 120); 
+INSERT INTO Ticket VALUES (38, 2, 110, 11 , 117);
+INSERT INTO Ticket VALUES (39, 3, 109, 12, 118);
+INSERT INTO Ticket VALUES (40, 4, 25, 13 , 119);
+INSERT INTO Ticket VALUES (41, 5, 30, 14 , 120);
+INSERT INTO Ticket VALUES (44 , 1 , 100 , 10 , 121);
 --
+INSERT INTO Sponsors VALUES (1, 'Microsoft');
+INSERT INTO Sponsors VALUES (1, 'Ford');
+INSERT INTO Sponsors VALUES (2, 'Ford');
+INSERT INTO Sponsors VALUES (2, 'Apple');
+INSERT INTO Sponsors VALUES (3, 'GVSU');
+INSERT INTO Sponsors VALUES (3, 'Facebook');
+INSERT INTO Sponsors VALUES (4, 'Milk');
+INSERT INTO Sponsors VALUES (4 , 'Ford');
+INSERT INTO Sponsors VALUES (5 , 'Facebook');
+INSERT INTO Sponsors VALUES (5 , 'Apple');
+INSERT INTO Sponsors VALUES (6 , 'ACM');
+INSERT INTO Sponsors VALUES (6 , 'Xfinity');
+INSERT INTO Sponsors VALUES (7 , ' Real');
+INSERT INTO Sponsors VALUES (7, 'Totco');
+INSERT INTO Sponsors VALUES (8 , 'Burger King');
+INSERT INTO Sponsors VALUES (8, 'Clean Water');
+INSERT INTO Sponsors VALUES (9, 'Powerhouse');
+INSERT INTO Sponsors VALUES (9, 'Midland');
+INSERT INTO Sponsors VALUES (10 , 'Newhouse');
+INSERT INTO Sponsors VALUES (10 , 'GVSU');
+INSERT INTO Sponsors VALUES (11 , 'Ford');
+INSERT INTO Sponsors VALUES (12 , 'Facebook');
+INSERT INTO Sponsors VALUES (11 , 'Milk');
+INSERT INTO Sponsors VALUES (12 , 'Real');
+INSERT INTO Sponsors VALUES (13 , 'Joes Pizza');
+INSERT INTO Sponsors VALUES (13 , 'Apple');
+INSERT INTO Sponsors VALUES (14 , 'Totco');
+INSERT INTO Sponsors VALUES (14 , 'ACM');
+INSERT INTO Sponsors VALUES (15 , 'Facebook');
+INSERT INTO Sponsors VALUES (15 , 'Clean Water');
 SET FEEDBACK ON
 COMMIT;
 --
@@ -354,7 +384,6 @@ WHERE
 -- Non-correlated subquery
 -- ------------------------------------
 --
--- non-correlated subquery
 SELECT E.eid,  E.event_date
 FROM Event E
 WHERE  
@@ -372,18 +401,17 @@ SELECT T.eid , T.ticket_number , E.eid , E.event_date
 -- Divisional Subquery
 -- ------------------------------------
 --
-SELECT A.aid, A.country, A.lname
-FROM Athlete A
+SELECT S.sid, S.lname
+FROM Spectator S
 WHERE NOT EXISTS((SELECT E.eid
-				   FROM Event E
-				   WHERE E.eid = 4
-				   MINUS
-				   (SELECT E.Sport
-				    FROM Event E, CompetesIn C
-				    WHERE C.aid = A.aid AND
-						  C.eid = E.eid AND
-						  E.eid = 4)));
-						
+				  FROM Event E
+				  WHERE E.eid = 1)
+				  MINUS
+				  (SELECT E.eid
+				   FROM Ticket T, Event E
+				   WHERE T.sid = S.sid AND
+						 T.eid = E.eid AND
+						 E.eid = 1));
 --------------------------------------
 --  GROUP BY ----
 --------------------------------------
@@ -392,7 +420,18 @@ FROM Spectator S, Country C
 WHERE C.population > 300000000 AND
 C.cname = S.cname
 GROUP BY S.cname
-HAVING COUNT(*) > 3;
+HAVING COUNT(*) > 3
+ORDER BY COUNT(*);
+--------------------------------------
+--  Join Involving 4 relations ----
+--------------------------------------
+SELECT S.fname, A.fname
+FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
+WHERE T.sid = S.sid AND
+		T.sid = E.eid AND
+		A.aid = CI.aid AND
+		E.eid = E.eid AND
+		S.cname = A.country;
 --
 -- TEST CONSTRAINTS
 --
