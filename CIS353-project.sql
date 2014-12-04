@@ -326,6 +326,30 @@ INSERT INTO Sponsors VALUES (14 , 'Totco');
 INSERT INTO Sponsors VALUES (14 , 'ACM');
 INSERT INTO Sponsors VALUES (15 , 'Facebook');
 INSERT INTO Sponsors VALUES (15 , 'Clean Water');
+--
+INSERT INTO CompetesIn VALUES (1 , 10 , 'gold');
+INSERT INTO CompetesIn VALUES (2,. 11 , 'silver');
+INSERT INTO CompetesIn VALUES (3 , 12 , 'bronze');
+INSERT INTO CompetesIn VALUES (4 , 13 , 'none');
+INSERT INTO CompetesIn VALUES (5 , 15 , 'none');I
+INSERT INTO CompetesIn VALUES (6 , 14 , 'gold');
+INSERT INTO CompetesIn VALUES (7 , 16 , 'silver');
+INSERT INTO CompetesIn VALUES (8 , 17 , 'bronze');
+INSERT INTO CompetesIn VALUES (9 , 18 , 'none' );
+INSERT INTO CompetesIn VALUES (10 , 19 , 'gold');
+INSERT INTO CompetesIn VALUES (11,. 20 , 'silver');
+INSERT INTO CompetesIn VALUES (12 , 21 , 'bronze');
+INSERT INTO CompetesIn VALUES (13, 22, 'none');
+INSERT INTO CompetesIn VALUES (14, 23 , 'none');I
+INSERT INTO CompetesIn VALUES (15, 24 , 'gold');
+INSERT INTO CompetesIn VALUES (16, 25 , 'silver');
+INSERT INTO CompetesIn VALUES (8 , 26 , 'silver');
+INSERT INTO CompetesIn VALUES (9 , 27 , 'none' );
+INSERT INTO CompetesIn VALUES (12 , 28 , 'gold');
+INSERT INTO CompetesIn VALUES (13, 29, 'none');
+INSERT INTO CompetesIn VALUES (14, 30 , 'none');I
+
+
 SET FEEDBACK ON
 COMMIT;
 --
