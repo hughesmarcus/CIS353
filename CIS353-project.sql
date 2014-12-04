@@ -1,5 +1,4 @@
 SPOOL project.out
-SET ECHO ON
 /**************************************
 CIS 353 - Database Design Project
    Daniel Kelch
@@ -8,15 +7,15 @@ CIS 353 - Database Design Project
    Travis Keel
    Alen Ramic
 **************************************/
---
+SET ECHO ON
 DROP TABLE Country CASCADE CONSTRAINT;
-DROP TABLE Event CASCADE CONSTRAINT;
-DROP TABLE Athlete CASCADE CONSTRAINT;
+DROP TABLE Country CASCADE CONSTRAINT;
 DROP TABLE Spectator CASCADE CONSTRAINT;
+DROP TABLE Athlete CASCADE CONSTRAINT;
+DROP TABLE Event CASCADE CONSTRAINT;
 DROP TABLE Ticket CASCADE CONSTRAINT;
 DROP TABLE CompetesIn CASCADE CONSTRAINT;
 DROP TABLE Sponsors CASCADE CONSTRAINT;
---
 --
 CREATE TABLE Country
 (
@@ -85,8 +84,13 @@ CONSTRAINT AC2 FOREIGN KEY (mentorID) REFERENCES Athlete(aid)
 	DEFERRABLE INITIALLY DEFERRED,
 CONSTRAINT AC3 FOREIGN KEY (country) REFERENCES Country(cname)
 	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED
+	DEFERRABLE INITIALLY DEFERRED,
+CONSTRAINT AC4 CHECK(mentorID != aid)
 );
+--
+-- ------------------------------------
+-- CompetesIn Table
+-- ------------------------------------
 --
 CREATE TABLE CompetesIn
 (
