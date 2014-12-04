@@ -452,9 +452,9 @@ ORDER BY COUNT(*);
 SELECT S.fname, A.fname
 FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
 WHERE T.sid = S.sid AND
-		T.sid = E.eid AND
+		T.eid = E.eid AND
 		A.aid = CI.aid AND
-		E.eid = E.eid AND
+		E.eid = CI.eid AND
 		S.cname = A.country;
 --
 -- TEST CONSTRAINTS
