@@ -1,0 +1,1386 @@
+SQL> /**************************************
+SQL> CIS 353 - Database Design Project
+SQL> 	Daniel Kelch
+SQL> 	John O'Brien
+SQL> 	Marcus Hughes
+SQL> 	Travis Keel
+SQL> 	Alen Ramic
+SQL> **************************************/
+SQL> SET ECHO ON
+SQL> DROP TABLE Country CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> DROP TABLE Country CASCADE CONSTRAINT;
+DROP TABLE Country CASCADE CONSTRAINT
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DROP TABLE Event CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> DROP TABLE Athlete CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> DROP TABLE Spectator CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> DROP TABLE Athlete CASCADE CONSTRAINT;
+DROP TABLE Athlete CASCADE CONSTRAINT
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DROP TABLE Event CASCADE CONSTRAINT;
+DROP TABLE Event CASCADE CONSTRAINT
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DROP TABLE Ticket CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> DROP TABLE CompetesIn CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> DROP TABLE Sponsors CASCADE CONSTRAINT;
+
+Table dropped.
+
+SQL> --
+SQL> CREATE TABLE Country
+  2  (
+  3  cname CHAR(35) NOT NULL,
+  4  population INTEGER NOT NULL,
+  5  --
+  6  --
+  7  CONSTRAINT CC1 PRIMARY KEY (cname),
+  8  CONSTRAINT CC2 CHECK (population >= 0)
+  9  );
+
+Table created.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Event table
+SQL> -- --------------------------------------------------------
+SQL> --
+SQL> CREATE TABLE Event
+  2  (
+  3  eid INTEGER,
+  4  event_date DATE NOT NULL,
+  5  empty_seats INTEGER NOT NULL,
+  6  sport CHAR(30),
+  7  --
+  8  -- EC1: The event id (eid) is the primary key of Event
+  9  CONSTRAINT EC1 PRIMARY KEY (eid),
+ 10  -- EC2: The number of empty seats must be between 0 and 10,000
+ 11  CONSTRAINT EC2 CHECK (empty_seats <= 10000 AND empty_seats >= 0),
+ 12  -- EC3: Checks that the date of the event is within a valid range
+ 13  -- for the 2016 summer Olympics (08/05/2016 - 08/21/2016)
+ 14  CONSTRAINT EC3 CHECK(TO_CHAR(event_date, 'YYYY-MM-DD') >= '2016-08-05' AND TO_CHAR(event_date, 'YYYY-MM-DD') <= '2016-08-21')
+ 15  );
+
+Table created.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Sponsors table
+SQL> -- --------------------------------------------------------
+SQL> --
+SQL> CREATE TABLE Sponsors
+  2  (
+  3  eid INTEGER,
+  4  sponsor_name CHAR(30) NOT NULL,
+  5  --
+  6  -- SC1: Event ID and sponsor name are the primary key of Sponsors
+  7  CONSTRAINT SC1 PRIMARY KEY (eid, sponsor_name),
+  8  -- SC2: Event ID of sponsors is a foreign key of te eid from Event
+  9  -- On deletion it will cascade.
+ 10  CONSTRAINT SC2 FOREIGN KEY (eid) REFERENCES Event(eid)
+ 11  	 ON DELETE CASCADE
+ 12  	 DEFERRABLE INITIALLY DEFERRED
+ 13  );
+
+Table created.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Athlete table
+SQL> -- --------------------------------------------------------
+SQL> --
+SQL> CREATE TABLE Athlete
+  2  (
+  3  aid INTEGER,
+  4  lname CHAR(30) NOT NULL,
+  5  fname CHAR(30) NOT NULL,
+  6  country CHAR(35) NOT NULL,
+  7  mentorID INTEGER,
+  8  --
+  9  --
+ 10  CONSTRAINT AC1 PRIMARY KEY (aid),
+ 11  CONSTRAINT AC2 FOREIGN KEY (mentorID) REFERENCES Athlete(aid)
+ 12  	     ON DELETE CASCADE
+ 13  	     DEFERRABLE INITIALLY DEFERRED,
+ 14  CONSTRAINT AC3 FOREIGN KEY (country) REFERENCES Country(cname)
+ 15  	     ON DELETE CASCADE
+ 16  	     DEFERRABLE INITIALLY DEFERRED,
+ 17  CONSTRAINT AC4 CHECK(mentorID != aid)
+ 18  );
+
+Table created.
+
+SQL> --
+SQL> -- ------------------------------------
+SQL> -- CompetesIn Table
+SQL> -- ------------------------------------
+SQL> --
+SQL> CREATE TABLE CompetesIn
+  2  (
+  3  eid INTEGER,
+  4  aid INTEGER,
+  5  medal CHAR(15) NOT NULL,
+  6  --
+  7  CONSTRAINT CIC1 PRIMARY KEY (eid, aid),
+  8  CONSTRAINT CIC2 CHECK(medal = 'gold' OR medal = 'silver' OR medal = 'bronze' OR medal = 'none'),
+  9  CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid)
+ 10  	     ON DELETE CASCADE
+ 11  	     DEFERRABLE INITIALLY DEFERRED,
+ 12  CONSTRAINT CIC4 FOREIGN KEY (aid) REFERENCES Athlete(aid)
+ 13  	     ON DELETE CASCADE
+ 14  	     DEFERRABLE INITIALLY DEFERRED
+ 15  );
+
+Table created.
+
+SQL> --
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Spectator table
+SQL> -- --------------------------------------------------------
+SQL> --
+SQL> CREATE TABLE Spectator
+  2  (
+  3  sid INTEGER,
+  4  lname CHAR(30) NOT NULL,
+  5  fname CHAR(30) NOT NULL,
+  6  cname CHAR(35) NOT NULL,
+  7  --
+  8  --
+  9  CONSTRAINT SPC1 PRIMARY KEY (sid),
+ 10  CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
+ 11  	     ON DELETE CASCADE
+ 12  	     DEFERRABLE INITIALLY DEFERRED
+ 13  );
+
+Table created.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Ticket table
+SQL> -- --------------------------------------------------------
+SQL> --
+SQL> CREATE TABLE Ticket
+  2  (
+  3  ticket_number INTEGER,
+  4  section_number INTEGER,
+  5  price INTEGER,
+  6  eid INTEGER,
+  7  sid INTEGER,
+  8  --
+  9  CONSTRAINT TC1 PRIMARY KEY (eid, ticket_number),
+ 10  CONSTRAINT TC2 FOREIGN KEY (eid) REFERENCES Event(eid)
+ 11  	     ON DELETE CASCADE
+ 12  	     DEFERRABLE INITIALLY DEFERRED,
+ 13  CONSTRAINT TC3 FOREIGN KEY (sid) REFERENCES Spectator(sid)
+ 14  	     ON DELETE CASCADE
+ 15  	     DEFERRABLE INITIALLY DEFERRED,
+ 16  CONSTRAINT TC4 CHECK(price >= 100/section_number)
+ 17  --
+ 18  );
+
+Table created.
+
+SQL> --
+SQL> SET AUTOCOMMIT OFF
+SQL> SET FEEDBACK OFF
+SQL> ---
+SQL> -- --------------------------------------------------------
+SQL> -- Populate the tables here
+SQL> -- --------------------------------------------------------
+SQL> --
+SQL> INSERT INTO Event VALUES (1, '06-AUG-16',987, 'Basketball');
+SQL> INSERT INTO Event VALUES (2, '08-AUG-16', 67, 'Handball');
+SQL> INSERT INTO Event VALUES (3, '13-AUG-16', 5, 'Water Polo');
+SQL> INSERT INTO Event VALUES (4, '21-AUG-16', 30, 'Volleyball');
+SQL> INSERT INTO Event VALUES (5, '07-AUG-16',254, 'Synchronized Swimming');
+SQL> INSERT INTO Event VALUES (6, '09-AUG-16', 670, 'Rowing');
+SQL> INSERT INTO Event VALUES (7, '11-AUG-16', 51, 'Judo');
+SQL> INSERT INTO Event VALUES (8, '11-AUG-16', 0, 'Football');
+SQL> INSERT INTO Event VALUES (9, '11-AUG-16', 87, 'Cycling Road');
+SQL> INSERT INTO Event VALUES (10, '21-AUG-16', 67, 'Tennis');
+SQL> INSERT INTO Event VALUES (11, '15-AUG-16', 9000, 'Golf');
+SQL> INSERT INTO Event VALUES (12, '16-AUG-16', 0007, 'Diving');
+SQL> INSERT INTO Event VALUES (13, '17-AUG-16', 21, 'Boxing');
+SQL> INSERT INTO Event VALUES (14, '18-AUG-16', 781, 'Shooting');
+SQL> INSERT INTO Event VALUES (15, '19-AUG-16', 19, 'Table Tennis');
+SQL> INSERT INTO Event VALUES (16, '20-AUG-16', 20, 'Fencing');
+SQL> --
+SQL> INSERT INTO Country VALUES('United States', 319134000);
+SQL> INSERT INTO Country VALUES('China', 1368030000 );
+SQL> INSERT INTO Country VALUES('India', 1262860000 );
+SQL> INSERT INTO Country VALUES('Indonesia', 252164800 );
+SQL> INSERT INTO Country VALUES('Brazil', 203481000 );
+SQL> INSERT INTO Country VALUES('Pakistan', 18829000 );
+SQL> INSERT INTO Country VALUES('Nigeria', 178517000 );
+SQL> INSERT INTO Country VALUES('Bangladesh', 157362000 );
+SQL> INSERT INTO Country VALUES('Russia', 146146200 );
+SQL> INSERT INTO Country VALUES('Japan', 127090000 );
+SQL> INSERT INTO Country VALUES('Philippines', 100588600 );
+SQL> INSERT INTO Country VALUES('Mexico',119713203 );
+SQL> INSERT INTO Country VALUES('Vietnam' , 89708900 );
+SQL> INSERT INTO Country VALUES('Ethiopia', 87952991);
+SQL> INSERT INTO Country VALUES('Egypt', 8754400 );
+SQL> INSERT INTO Country VALUES('Germany', 80767000 );
+SQL> INSERT INTO Country VALUES('Iran', 77912500 );
+SQL> INSERT INTO Country VALUES('Turkey', 76667864  );
+SQL> INSERT INTO Country VALUES('France', 66050000 );
+SQL> INSERT INTO Country VALUES('Thailand',64871000 );
+SQL> INSERT INTO Country VALUES('United Kingdom',64105654  );
+SQL> INSERT INTO Country VALUES('Italy',60783711  );
+SQL> INSERT INTO Country VALUES('South Africa',54002000 );
+SQL> INSERT INTO Country VALUES('South Korea',5423955  );
+SQL> INSERT INTO Country VALUES('Colombia', 47875800 );
+SQL> INSERT INTO Country VALUES('Tanzania',47421786 );
+SQL> INSERT INTO Country VALUES('Spain' , 46507760);
+SQL> INSERT INTO Country VALUES('Ukraine',42973696);
+SQL> INSERT INTO Country VALUES('Argentina' ,42669500 );
+SQL> INSERT INTO Country VALUES('Kenya',41800000 );
+SQL> INSERT INTO Country VALUES('Canada', 35540419);
+SQL> INSERT INTO Country VALUES('Cameroon', 20386799 );
+SQL> INSERT INTO Country VALUES('Portugal', 10477800 );
+SQL> INSERT INTO Country VALUES('Jamaica' , 2717991);
+SQL> INSERT INTO Country VALUES('Sweden',9728498 );
+SQL> INSERT INTO Country VALUES('Belgium',11225469);
+SQL> INSERT INTO Country VALUES('Ghana' , 27043093);
+SQL> --
+SQL> INSERT INTO Athlete VALUES(10, 'OBrien', 'John', 'United States', NULL);
+SQL> INSERT INTO Athlete VALUES(11, 'OBrien', 'Jack', 'United States', 10);
+SQL> INSERT INTO Athlete VALUES(12, 'Hughes', 'Marcus', 'Germany', 15);
+SQL> INSERT INTO Athlete VALUES(13, 'Keel', 'Travis', 'Germany', 12);
+SQL> INSERT INTO Athlete VALUES(14, 'Ramic', 'Alen', 'Germany', 15);
+SQL> INSERT INTO Athlete VALUES(15, 'Kelch', 'Daniel', 'Germany', NULL);
+SQL> INSERT INTO Athlete VALUES(16, 'Springus', 'Harold', 'Russia', NULL);
+SQL> INSERT INTO Athlete VALUES(17, 'Hawthorne', 'Gerald', 'Russia', 16);
+SQL> INSERT INTO Athlete VALUES(18, 'Front', 'Rosemary', 'Russia', 17);
+SQL> INSERT INTO Athlete VALUES(19, 'Tennis', 'Tim', 'Canada', NULL);
+SQL> INSERT INTO Athlete VALUES(20, 'Robertson', 'Robert', 'Canada', 19);
+SQL> INSERT INTO Athlete VALUES(21, 'Hudson', 'Marlene', 'Canada', 20);
+SQL> INSERT INTO Athlete VALUES(22, 'West', 'North', 'China', NULL);
+SQL> INSERT INTO Athlete VALUES(23, 'Philips', 'Michael', 'China', 22);
+SQL> INSERT INTO Athlete VALUES(24, 'Muscle', 'Uncle', 'China', 22);
+SQL> INSERT INTO Athlete VALUES(25, 'Lee', 'Bryce', 'China', 24);
+SQL> INSERT INTO Athlete VALUES(26, 'Hoke', 'Brady', 'United States', 10);
+SQL> INSERT INTO Athlete VALUES(27, 'Seger', 'Bill', 'United States', 11);
+SQL> INSERT INTO Athlete VALUES(28, 'Obama', 'BarackHUSSEIN', 'Thailand', NULL);
+SQL> INSERT INTO Athlete VALUES(29, 'Jonas', 'Mick', 'Italy', NULL);
+SQL> INSERT INTO Athlete VALUES(30, 'Jackson III', 'Curtis James', 'France', NULL);
+SQL> --
+SQL> INSERT INTO Spectator VALUES(100, 'Miller', 'John', 'United States');
+SQL> INSERT INTO Spectator VALUES(119, 'Cunningham', 'Bradley', 'United States');
+SQL> INSERT INTO Spectator VALUES(120, 'Hanson', 'Jeff', 'United States');
+SQL> INSERT INTO Spectator VALUES(121, 'Wilson', 'Anthony', 'United States');
+SQL> INSERT INTO Spectator VALUES(110, 'Miller', 'John', 'United States');
+SQL> INSERT INTO Spectator VALUES(101, 'Sanches', 'Aguero', 'Argentina');
+SQL> INSERT INTO Spectator VALUES(102, 'Lee', 'Wong', 'China');
+SQL> INSERT INTO Spectator VALUES(103, 'Aqel', 'Mohammad', 'Egypt');
+SQL> INSERT INTO Spectator VALUES(104, 'Kriplani', 'Malavika', 'India');
+SQL> INSERT INTO Spectator VALUES(105, 'Curryfresh', 'Rasheed', 'Pakistan');
+SQL> INSERT INTO Spectator VALUES(106, 'Shizmahal', 'Berut', 'Indonesia');
+SQL> INSERT INTO Spectator VALUES(107, 'Sanches', 'Neymar', 'Brazil');
+SQL> INSERT INTO Spectator VALUES(108, 'Kroptykov', 'Vladimir', 'Russia');
+SQL> INSERT INTO Spectator VALUES(109, 'Shango', 'Wan', 'Japan');
+SQL> INSERT INTO Spectator VALUES(111, 'Wienerschintzle', 'Hanz', 'Germany');
+SQL> INSERT INTO Spectator VALUES(112, 'Uccello', 'Fabio', 'Italy');
+SQL> INSERT INTO Spectator VALUES(113, 'Fabregas', 'Iniesta', 'Spain');
+SQL> INSERT INTO Spectator VALUES(114, 'Measho', 'Micheal', 'Ethiopia');
+SQL> INSERT INTO Spectator VALUES(115, 'Christiano', 'Ronaldo', 'Portugal');
+SQL> INSERT INTO Spectator VALUES(116, 'Kriplani', 'Mehmenal', 'India');
+SQL> INSERT INTO Spectator VALUES(117, 'Rastip', 'Shahimteg', 'India');
+SQL> INSERT INTO Spectator VALUES(118, 'Mahood', 'Melket', 'India');
+SQL> --
+SQL> INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100);
+SQL> INSERT INTO Ticket VALUES (2, 1, 119, 2 , 101);
+SQL> INSERT INTO Ticket VALUES (3, 1, 118, 3 , 102);
+SQL> INSERT INTO Ticket VALUES (4, 1, 117, 4 , 103);
+SQL> INSERT INTO Ticket VALUES (5, 1, 116, 5 , 104);
+SQL> INSERT INTO Ticket VALUES (6, 1, 115, 6 , 105);
+SQL> INSERT INTO Ticket VALUES (7, 1, 114, 7 , 106);
+SQL> INSERT INTO Ticket VALUES (8, 1, 113, 8 , 107);
+SQL> INSERT INTO Ticket VALUES (9, 1, 112, 9 , 108);
+SQL> INSERT INTO Ticket VALUES (10, 1, 111, 10, 109);
+SQL> INSERT INTO Ticket VALUES (11, 1, 110, 1 , 110);
+SQL> INSERT INTO Ticket VALUES (12, 1, 109, 12, 111);
+SQL> INSERT INTO Ticket VALUES (13, 1, 108, 13 , 112);
+SQL> INSERT INTO Ticket VALUES (14, 1, 107, 14 , 113);
+SQL> INSERT INTO Ticket VALUES (15, 1, 100, 15 , 114);
+SQL> INSERT INTO Ticket VALUES (16, 1, 120, 16 , 115);
+SQL> INSERT INTO Ticket VALUES (17 , 2, 120 , 1 , 100);
+SQL> INSERT INTO Ticket VALUES (18, 3, 119, 2 , 101);
+SQL> INSERT INTO Ticket VALUES (19, 3, 118, 3 , 102);
+SQL> INSERT INTO Ticket VALUES (20, 4, 117, 4 , 103);
+SQL> INSERT INTO Ticket VALUES (21, 3, 116, 5 , 104);
+SQL> INSERT INTO Ticket VALUES (22, 2, 115, 6 , 105);
+SQL> INSERT INTO Ticket VALUES (23, 1, 114, 7 , 106);
+SQL> INSERT INTO Ticket VALUES (24, 3, 113, 8 , 107);
+SQL> INSERT INTO Ticket VALUES (25, 4, 112, 9 , 108);
+SQL> INSERT INTO Ticket VALUES (26 , 2, 111 , 10 , 109);
+SQL> INSERT INTO Ticket VALUES (27, 2, 110, 1 , 110);
+SQL> INSERT INTO Ticket VALUES (28, 3, 109, 12, 111);
+SQL> INSERT INTO Ticket VALUES (29, 4, 25, 13 , 112);
+SQL> INSERT INTO Ticket VALUES (30, 5, 30, 14 , 113);
+SQL> INSERT INTO Ticket VALUES (31, 2, 100, 15 , 114);
+SQL> INSERT INTO Ticket VALUES (32, 1, 120, 16 , 115);
+SQL> INSERT INTO Ticket VALUES (33 , 1 , 100 , 1 , 121);
+SQL> INSERT INTO Ticket VALUES (34, 1, 114, 7 , 117);
+SQL> INSERT INTO Ticket VALUES (35, 3, 113, 8 , 118);
+SQL> INSERT INTO Ticket VALUES (36, 4, 112, 1 , 119);
+SQL> INSERT INTO Ticket VALUES (37 , 2, 111 , 1 , 120);
+SQL> INSERT INTO Ticket VALUES (38, 2, 110, 11 , 117);
+SQL> INSERT INTO Ticket VALUES (39, 3, 109, 12, 118);
+SQL> INSERT INTO Ticket VALUES (40, 4, 25, 1 , 119);
+SQL> INSERT INTO Ticket VALUES (41, 5, 30, 1 , 120);
+SQL> INSERT INTO Ticket VALUES (44 , 1 , 100 , 1 , 121);
+SQL> INSERT INTO Ticket VALUES (45, 1, 120, 16, 100);
+SQL> INSERT INTO Ticket VALUES (46, 1, 120, 16, 119);
+SQL> INSERT INTO Ticket VALUES (47, 1, 120, 16, 120);
+SQL> INSERT INTO Ticket VALUES (48, 1, 120, 16, 121);
+SQL> INSERT INTO Ticket VALUES (49, 1, 120, 16, 110);
+SQL> --
+SQL> INSERT INTO Sponsors VALUES (1, 'Microsoft');
+SQL> INSERT INTO Sponsors VALUES (1, 'Ford');
+SQL> INSERT INTO Sponsors VALUES (2, 'Ford');
+SQL> INSERT INTO Sponsors VALUES (2, 'Apple');
+SQL> INSERT INTO Sponsors VALUES (3, 'GVSU');
+SQL> INSERT INTO Sponsors VALUES (3, 'Facebook');
+SQL> INSERT INTO Sponsors VALUES (4, 'Milk');
+SQL> INSERT INTO Sponsors VALUES (4 , 'Ford');
+SQL> INSERT INTO Sponsors VALUES (5 , 'Facebook');
+SQL> INSERT INTO Sponsors VALUES (5 , 'Apple');
+SQL> INSERT INTO Sponsors VALUES (6 , 'ACM');
+SQL> INSERT INTO Sponsors VALUES (6 , 'Xfinity');
+SQL> INSERT INTO Sponsors VALUES (7 , ' Real');
+SQL> INSERT INTO Sponsors VALUES (7, 'Totco');
+SQL> INSERT INTO Sponsors VALUES (8 , 'Burger King');
+SQL> INSERT INTO Sponsors VALUES (8, 'Clean Water');
+SQL> INSERT INTO Sponsors VALUES (9, 'Powerhouse');
+SQL> INSERT INTO Sponsors VALUES (9, 'Midland');
+SQL> INSERT INTO Sponsors VALUES (10 , 'Newhouse');
+SQL> INSERT INTO Sponsors VALUES (10 , 'GVSU');
+SQL> INSERT INTO Sponsors VALUES (11 , 'Ford');
+SQL> INSERT INTO Sponsors VALUES (12 , 'Facebook');
+SQL> INSERT INTO Sponsors VALUES (11 , 'Milk');
+SQL> INSERT INTO Sponsors VALUES (12 , 'Real');
+SQL> INSERT INTO Sponsors VALUES (13 , 'Joes Pizza');
+SQL> INSERT INTO Sponsors VALUES (13 , 'Apple');
+SQL> INSERT INTO Sponsors VALUES (14 , 'Totco');
+SQL> INSERT INTO Sponsors VALUES (14 , 'ACM');
+SQL> INSERT INTO Sponsors VALUES (15 , 'Facebook');
+SQL> INSERT INTO Sponsors VALUES (15 , 'Clean Water');
+SQL> --
+SQL> INSERT INTO CompetesIn VALUES (10 , 10 , 'none');
+SQL> INSERT INTO CompetesIn VALUES (2, 11 , 'silver');
+SQL> INSERT INTO CompetesIn VALUES (3 , 12 , 'bronze');
+SQL> INSERT INTO CompetesIn VALUES (4 , 13 , 'none');
+SQL> INSERT INTO CompetesIn VALUES (5 , 15 , 'none');
+SQL> INSERT INTO CompetesIn VALUES (6 , 14 , 'gold');
+SQL> INSERT INTO CompetesIn VALUES (7 , 16 , 'silver');
+SQL> INSERT INTO CompetesIn VALUES (8 , 17 , 'bronze');
+SQL> INSERT INTO CompetesIn VALUES (9 , 18 , 'none' );
+SQL> INSERT INTO CompetesIn VALUES (10 , 19 , 'gold');
+SQL> INSERT INTO CompetesIn VALUES (11, 20 , 'silver');
+SQL> INSERT INTO CompetesIn VALUES (12 , 21 , 'bronze');
+SQL> INSERT INTO CompetesIn VALUES (13, 22, 'none');
+SQL> INSERT INTO CompetesIn VALUES (14, 23 , 'none');
+SQL> INSERT INTO CompetesIn VALUES (15, 24 , 'gold');
+SQL> INSERT INTO CompetesIn VALUES (16, 25 , 'silver');
+SQL> INSERT INTO CompetesIn VALUES (8 , 26 , 'silver');
+SQL> INSERT INTO CompetesIn VALUES (9 , 27 , 'none' );
+SQL> INSERT INTO CompetesIn VALUES (12 , 28 , 'gold');
+SQL> INSERT INTO CompetesIn VALUES (13, 29, 'none');
+SQL> INSERT INTO CompetesIn VALUES (14, 30 , 'none');
+SQL> --
+SQL> --
+SQL> SET FEEDBACK ON
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> --
+SQL> --
+SQL> SELECT * FROM Event;
+
+       EID EVENT_DAT EMPTY_SEATS SPORT                                          
+---------- --------- ----------- ------------------------------                 
+         1 06-AUG-16         987 Basketball                                     
+         2 08-AUG-16          67 Handball                                       
+         3 13-AUG-16           5 Water Polo                                     
+         4 21-AUG-16          30 Volleyball                                     
+         5 07-AUG-16         254 Synchronized Swimming                          
+         6 09-AUG-16         670 Rowing                                         
+         7 11-AUG-16          51 Judo                                           
+         8 11-AUG-16           0 Football                                       
+         9 11-AUG-16          87 Cycling Road                                   
+        10 21-AUG-16          67 Tennis                                         
+        11 15-AUG-16        9000 Golf                                           
+
+       EID EVENT_DAT EMPTY_SEATS SPORT                                          
+---------- --------- ----------- ------------------------------                 
+        12 16-AUG-16           7 Diving                                         
+        13 17-AUG-16          21 Boxing                                         
+        14 18-AUG-16         781 Shooting                                       
+        15 19-AUG-16          19 Table Tennis                                   
+        16 20-AUG-16          20 Fencing                                        
+
+16 rows selected.
+
+SQL> SELECT * FROM Athlete;
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        10 OBrien                         John                                  
+United States                                                                   
+                                                                                
+        11 OBrien                         Jack                                  
+United States                               10                                  
+                                                                                
+        12 Hughes                         Marcus                                
+Germany                                     15                                  
+                                                                                
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        13 Keel                           Travis                                
+Germany                                     12                                  
+                                                                                
+        14 Ramic                          Alen                                  
+Germany                                     15                                  
+                                                                                
+        15 Kelch                          Daniel                                
+Germany                                                                         
+                                                                                
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        16 Springus                       Harold                                
+Russia                                                                          
+                                                                                
+        17 Hawthorne                      Gerald                                
+Russia                                      16                                  
+                                                                                
+        18 Front                          Rosemary                              
+Russia                                      17                                  
+                                                                                
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        19 Tennis                         Tim                                   
+Canada                                                                          
+                                                                                
+        20 Robertson                      Robert                                
+Canada                                      19                                  
+                                                                                
+        21 Hudson                         Marlene                               
+Canada                                      20                                  
+                                                                                
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        22 West                           North                                 
+China                                                                           
+                                                                                
+        23 Philips                        Michael                               
+China                                       22                                  
+                                                                                
+        24 Muscle                         Uncle                                 
+China                                       22                                  
+                                                                                
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        25 Lee                            Bryce                                 
+China                                       24                                  
+                                                                                
+        26 Hoke                           Brady                                 
+United States                               10                                  
+                                                                                
+        27 Seger                          Bill                                  
+United States                               11                                  
+                                                                                
+
+       AID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+COUNTRY                               MENTORID                                  
+----------------------------------- ----------                                  
+        28 Obama                          BarackHUSSEIN                         
+Thailand                                                                        
+                                                                                
+        29 Jonas                          Mick                                  
+Italy                                                                           
+                                                                                
+        30 Jackson III                    Curtis James                          
+France                                                                          
+                                                                                
+
+21 rows selected.
+
+SQL> SELECT * FROM Country;
+
+CNAME                               POPULATION                                  
+----------------------------------- ----------                                  
+United States                        319134000                                  
+China                               1368030000                                  
+India                               1262860000                                  
+Indonesia                            252164800                                  
+Brazil                               203481000                                  
+Pakistan                              18829000                                  
+Nigeria                              178517000                                  
+Bangladesh                           157362000                                  
+Russia                               146146200                                  
+Japan                                127090000                                  
+Philippines                          100588600                                  
+
+CNAME                               POPULATION                                  
+----------------------------------- ----------                                  
+Mexico                               119713203                                  
+Vietnam                               89708900                                  
+Ethiopia                              87952991                                  
+Egypt                                  8754400                                  
+Germany                               80767000                                  
+Iran                                  77912500                                  
+Turkey                                76667864                                  
+France                                66050000                                  
+Thailand                              64871000                                  
+United Kingdom                        64105654                                  
+Italy                                 60783711                                  
+
+CNAME                               POPULATION                                  
+----------------------------------- ----------                                  
+South Africa                          54002000                                  
+South Korea                            5423955                                  
+Colombia                              47875800                                  
+Tanzania                              47421786                                  
+Spain                                 46507760                                  
+Ukraine                               42973696                                  
+Argentina                             42669500                                  
+Kenya                                 41800000                                  
+Canada                                35540419                                  
+Cameroon                              20386799                                  
+Portugal                              10477800                                  
+
+CNAME                               POPULATION                                  
+----------------------------------- ----------                                  
+Jamaica                                2717991                                  
+Sweden                                 9728498                                  
+Belgium                               11225469                                  
+Ghana                                 27043093                                  
+
+37 rows selected.
+
+SQL> SELECT * FROM Spectator;
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       100 Miller                         John                                  
+United States                                                                   
+                                                                                
+       119 Cunningham                     Bradley                               
+United States                                                                   
+                                                                                
+       120 Hanson                         Jeff                                  
+United States                                                                   
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       121 Wilson                         Anthony                               
+United States                                                                   
+                                                                                
+       110 Miller                         John                                  
+United States                                                                   
+                                                                                
+       101 Sanches                        Aguero                                
+Argentina                                                                       
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       102 Lee                            Wong                                  
+China                                                                           
+                                                                                
+       103 Aqel                           Mohammad                              
+Egypt                                                                           
+                                                                                
+       104 Kriplani                       Malavika                              
+India                                                                           
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       105 Curryfresh                     Rasheed                               
+Pakistan                                                                        
+                                                                                
+       106 Shizmahal                      Berut                                 
+Indonesia                                                                       
+                                                                                
+       107 Sanches                        Neymar                                
+Brazil                                                                          
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       108 Kroptykov                      Vladimir                              
+Russia                                                                          
+                                                                                
+       109 Shango                         Wan                                   
+Japan                                                                           
+                                                                                
+       111 Wienerschintzle                Hanz                                  
+Germany                                                                         
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       112 Uccello                        Fabio                                 
+Italy                                                                           
+                                                                                
+       113 Fabregas                       Iniesta                               
+Spain                                                                           
+                                                                                
+       114 Measho                         Micheal                               
+Ethiopia                                                                        
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       115 Christiano                     Ronaldo                               
+Portugal                                                                        
+                                                                                
+       116 Kriplani                       Mehmenal                              
+India                                                                           
+                                                                                
+       117 Rastip                         Shahimteg                             
+India                                                                           
+                                                                                
+
+       SID LNAME                          FNAME                                 
+---------- ------------------------------ ------------------------------        
+CNAME                                                                           
+-----------------------------------                                             
+       118 Mahood                         Melket                                
+India                                                                           
+                                                                                
+
+22 rows selected.
+
+SQL> SELECT * FROM Ticket;
+
+TICKET_NUMBER SECTION_NUMBER      PRICE        EID        SID                   
+------------- -------------- ---------- ---------- ----------                   
+            1              1        120          1        100                   
+            2              1        119          2        101                   
+            3              1        118          3        102                   
+            4              1        117          4        103                   
+            5              1        116          5        104                   
+            6              1        115          6        105                   
+            7              1        114          7        106                   
+            8              1        113          8        107                   
+            9              1        112          9        108                   
+           10              1        111         10        109                   
+           11              1        110          1        110                   
+
+TICKET_NUMBER SECTION_NUMBER      PRICE        EID        SID                   
+------------- -------------- ---------- ---------- ----------                   
+           12              1        109         12        111                   
+           13              1        108         13        112                   
+           14              1        107         14        113                   
+           15              1        100         15        114                   
+           16              1        120         16        115                   
+           17              2        120          1        100                   
+           18              3        119          2        101                   
+           19              3        118          3        102                   
+           20              4        117          4        103                   
+           21              3        116          5        104                   
+           22              2        115          6        105                   
+
+TICKET_NUMBER SECTION_NUMBER      PRICE        EID        SID                   
+------------- -------------- ---------- ---------- ----------                   
+           23              1        114          7        106                   
+           24              3        113          8        107                   
+           25              4        112          9        108                   
+           26              2        111         10        109                   
+           27              2        110          1        110                   
+           28              3        109         12        111                   
+           29              4         25         13        112                   
+           30              5         30         14        113                   
+           31              2        100         15        114                   
+           32              1        120         16        115                   
+           33              1        100          1        121                   
+
+TICKET_NUMBER SECTION_NUMBER      PRICE        EID        SID                   
+------------- -------------- ---------- ---------- ----------                   
+           34              1        114          7        117                   
+           35              3        113          8        118                   
+           36              4        112          1        119                   
+           37              2        111          1        120                   
+           38              2        110         11        117                   
+           39              3        109         12        118                   
+           40              4         25          1        119                   
+           41              5         30          1        120                   
+           44              1        100          1        121                   
+           45              1        120         16        100                   
+           46              1        120         16        119                   
+
+TICKET_NUMBER SECTION_NUMBER      PRICE        EID        SID                   
+------------- -------------- ---------- ---------- ----------                   
+           47              1        120         16        120                   
+           48              1        120         16        121                   
+           49              1        120         16        110                   
+
+47 rows selected.
+
+SQL> SELECT * FROM Sponsors;
+
+       EID SPONSOR_NAME                                                         
+---------- ------------------------------                                       
+         1 Ford                                                                 
+         1 Microsoft                                                            
+         2 Apple                                                                
+         2 Ford                                                                 
+         3 Facebook                                                             
+         3 GVSU                                                                 
+         4 Ford                                                                 
+         4 Milk                                                                 
+         5 Apple                                                                
+         5 Facebook                                                             
+         6 ACM                                                                  
+
+       EID SPONSOR_NAME                                                         
+---------- ------------------------------                                       
+         6 Xfinity                                                              
+         7  Real                                                                
+         7 Totco                                                                
+         8 Burger King                                                          
+         8 Clean Water                                                          
+         9 Midland                                                              
+         9 Powerhouse                                                           
+        10 GVSU                                                                 
+        10 Newhouse                                                             
+        11 Ford                                                                 
+        11 Milk                                                                 
+
+       EID SPONSOR_NAME                                                         
+---------- ------------------------------                                       
+        12 Facebook                                                             
+        12 Real                                                                 
+        13 Apple                                                                
+        13 Joes Pizza                                                           
+        14 ACM                                                                  
+        14 Totco                                                                
+        15 Clean Water                                                          
+        15 Facebook                                                             
+
+30 rows selected.
+
+SQL> SELECT * FROM CompetesIn;
+
+       EID        AID MEDAL                                                     
+---------- ---------- ---------------                                           
+        10         10 none                                                      
+         2         11 silver                                                    
+         3         12 bronze                                                    
+         4         13 none                                                      
+         5         15 none                                                      
+         6         14 gold                                                      
+         7         16 silver                                                    
+         8         17 bronze                                                    
+         9         18 none                                                      
+        10         19 gold                                                      
+        11         20 silver                                                    
+
+       EID        AID MEDAL                                                     
+---------- ---------- ---------------                                           
+        12         21 bronze                                                    
+        13         22 none                                                      
+        14         23 none                                                      
+        15         24 gold                                                      
+        16         25 silver                                                    
+         8         26 silver                                                    
+         9         27 none                                                      
+        12         28 gold                                                      
+        13         29 none                                                      
+        14         30 none                                                      
+
+21 rows selected.
+
+SQL> --
+SQL> -- ========================================================
+SQL> -- QUERIES
+SQL> -- ========================================================
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q1 -
+SQL> -- Selects all countries with a population
+SQL> -- that is greater than 100,000,000
+SQL> -- --------------------------------------------------------
+SQL> SELECT C.cname FROM Country C
+  2  WHERE C.population > 100000000;
+
+CNAME                                                                           
+-----------------------------------                                             
+United States                                                                   
+China                                                                           
+India                                                                           
+Indonesia                                                                       
+Brazil                                                                          
+Nigeria                                                                         
+Bangladesh                                                                      
+Russia                                                                          
+Japan                                                                           
+Philippines                                                                     
+Mexico                                                                          
+
+11 rows selected.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q2 - AVG, MINUS, Correlated subquery
+SQL> -- Selects all countries with above avg population
+SQL> -- --------------------------------------------------------
+SQL> SELECT C.cname, C.population
+  2  FROM Country C
+  3  MINUS
+  4  SELECT C.cname, C.population
+  5  FROM Country C
+  6  WHERE C.population < (SELECT AVG(C.population) FROM Country C);
+
+CNAME                               POPULATION                                  
+----------------------------------- ----------                                  
+Bangladesh                           157362000                                  
+Brazil                               203481000                                  
+China                               1368030000                                  
+India                               1262860000                                  
+Indonesia                            252164800                                  
+Nigeria                              178517000                                  
+Russia                               146146200                                  
+United States                        319134000                                  
+
+8 rows selected.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q3 - Self Join
+SQL> -- Selects two sponsors
+SQL> -- --------------------------------------------------------
+SQL> SELECT S1.eid, S2.eid
+  2  FROM Sponsors S1, Sponsors S2
+  3  WHERE S1.eid > 3 AND
+  4  S1.sponsor_name = S2.sponsor_name AND
+  5  S1.eid < S2.eid ;
+
+       EID        EID                                                           
+---------- ----------                                                           
+         4         11                                                           
+         4         11                                                           
+         5         12                                                           
+         5         13                                                           
+         6         14                                                           
+         7         14                                                           
+         8         15                                                           
+        12         15                                                           
+         5         15                                                           
+
+9 rows selected.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q4 - Correlated subquery
+SQL> -- Selects all events without sponsors
+SQL> -- --------------------------------------------------------
+SQL> SELECT E.eid, E.event_date
+  2  FROM Event E
+  3  WHERE
+  4  	     NOT EXISTS ( SELECT *
+  5  	     FROM  Sponsors S
+  6  	     WHERE E.eid = S.eid);
+
+       EID EVENT_DAT                                                            
+---------- ---------                                                            
+        16 20-AUG-16                                                            
+
+1 row selected.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q5 - Non-correlated subquery
+SQL> -- Selects all events without sponsors
+SQL> -- --------------------------------------------------------
+SQL> SELECT E.eid,  E.event_date
+  2  FROM Event E
+  3  WHERE
+  4  	     E.eid NOT IN (SELECT S.eid
+  5  	     FROM  Sponsors S);
+
+       EID EVENT_DAT                                                            
+---------- ---------                                                            
+        16 20-AUG-16                                                            
+
+1 row selected.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q6 - Outer Join
+SQL> -- Selects Ticket and Event where the ticket belongs to the
+SQL> -- event
+SQL> -- --------------------------------------------------------
+SQL> SELECT T.eid , T.ticket_number , E.eid , E.event_date
+  2  	     FROM Ticket T LEFT OUTER JOIN Event E ON T.eid = E.eid;
+
+       EID TICKET_NUMBER        EID EVENT_DAT                                   
+---------- ------------- ---------- ---------                                   
+         1            44          1 06-AUG-16                                   
+         1            41          1 06-AUG-16                                   
+         1            40          1 06-AUG-16                                   
+         1            37          1 06-AUG-16                                   
+         1            36          1 06-AUG-16                                   
+         1            33          1 06-AUG-16                                   
+         1            27          1 06-AUG-16                                   
+         1            17          1 06-AUG-16                                   
+         1            11          1 06-AUG-16                                   
+         1             1          1 06-AUG-16                                   
+         2            18          2 08-AUG-16                                   
+
+       EID TICKET_NUMBER        EID EVENT_DAT                                   
+---------- ------------- ---------- ---------                                   
+         2             2          2 08-AUG-16                                   
+         3            19          3 13-AUG-16                                   
+         3             3          3 13-AUG-16                                   
+         4            20          4 21-AUG-16                                   
+         4             4          4 21-AUG-16                                   
+         5            21          5 07-AUG-16                                   
+         5             5          5 07-AUG-16                                   
+         6            22          6 09-AUG-16                                   
+         6             6          6 09-AUG-16                                   
+         7            34          7 11-AUG-16                                   
+         7            23          7 11-AUG-16                                   
+
+       EID TICKET_NUMBER        EID EVENT_DAT                                   
+---------- ------------- ---------- ---------                                   
+         7             7          7 11-AUG-16                                   
+         8            35          8 11-AUG-16                                   
+         8            24          8 11-AUG-16                                   
+         8             8          8 11-AUG-16                                   
+         9            25          9 11-AUG-16                                   
+         9             9          9 11-AUG-16                                   
+        10            26         10 21-AUG-16                                   
+        10            10         10 21-AUG-16                                   
+        11            38         11 15-AUG-16                                   
+        12            39         12 16-AUG-16                                   
+        12            28         12 16-AUG-16                                   
+
+       EID TICKET_NUMBER        EID EVENT_DAT                                   
+---------- ------------- ---------- ---------                                   
+        12            12         12 16-AUG-16                                   
+        13            29         13 17-AUG-16                                   
+        13            13         13 17-AUG-16                                   
+        14            30         14 18-AUG-16                                   
+        14            14         14 18-AUG-16                                   
+        15            31         15 19-AUG-16                                   
+        15            15         15 19-AUG-16                                   
+        16            49         16 20-AUG-16                                   
+        16            48         16 20-AUG-16                                   
+        16            47         16 20-AUG-16                                   
+        16            46         16 20-AUG-16                                   
+
+       EID TICKET_NUMBER        EID EVENT_DAT                                   
+---------- ------------- ---------- ---------                                   
+        16            45         16 20-AUG-16                                   
+        16            32         16 20-AUG-16                                   
+        16            16         16 20-AUG-16                                   
+
+47 rows selected.
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- - Q7 - Division, Coorelated Subquery, Minus
+SQL> -- - Returns all events that all Americans are attending
+SQL> -- --------------------------------------------------------
+SQL> SELECT E.eid, E.sport
+  2  FROM Event E
+  3  WHERE NOT EXISTS((SELECT S.cname
+  4  				       FROM Spectator S
+  5  				       WHERE S.cname = 'United States')
+  6  				       MINUS
+  7  				       (SELECT S.cname
+  8  					FROM Spectator S, Ticket T
+  9  					WHERE T.sid = S.sid AND
+ 10  						      T.eid = E.eid AND
+ 11  						      S.cname = 'United States'));
+
+       EID SPORT                                                                
+---------- ------------------------------                                       
+         1 Basketball                                                           
+        16 Fencing                                                              
+
+2 rows selected.
+
+SQL> -----------------------------------------------------------
+SQL> --  GROUP BY ----
+SQL> --------------------------------------------------------
+SQL> Select S.cname, COUNT(*)
+  2  FROM Spectator S, Country C
+  3  WHERE C.population > 300000000 AND
+  4  C.cname = S.cname
+  5  GROUP BY S.cname
+  6  HAVING COUNT(*) > 3
+  7  ORDER BY COUNT(*);
+
+CNAME                                 COUNT(*)                                  
+----------------------------------- ----------                                  
+India                                        4                                  
+United States                                5                                  
+
+2 rows selected.
+
+SQL> -- --------------------------------------------------------
+SQL> -- - Q9 - Join Involving 4 relations
+SQL> -- Selects all Spectators ad Athlets that attend the same event
+SQL> -- and are from teh same country
+SQL> -- --------------------------------------------------------
+SQL> SELECT DISTINCT S.fname, A.fname
+  2  FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
+  3  WHERE T.sid = S.sid AND
+  4  		     T.eid = E.eid AND
+  5  		     A.aid = CI.aid AND
+  6  		     E.eid = CI.eid AND
+  7  		     S.cname = A.country;
+
+FNAME                          FNAME                                            
+------------------------------ ------------------------------                   
+Vladimir                       Rosemary                                         
+Fabio                          Mick                                             
+
+2 rows selected.
+
+SQL> --
+SQL> -- ========================================================
+SQL> -- TEST CONSTRAINTS
+SQL> -- ========================================================
+SQL> --
+SQL> SET AUTOCOMMIT ON
+SQL> -- --------------------------------------------------------
+SQL> -- Country Test
+SQL> -- --------------------------------------------------------
+SQL> -- Tests CC1
+SQL> INSERT INTO Country VALUES ('United States', 2);
+INSERT INTO Country VALUES ('United States', 2)
+*
+ERROR at line 1:
+ORA-00001: unique constraint (OBRIENJO.CC1) violated 
+
+
+SQL> -- Tests CC2
+SQL> INSERT INTO Country VALUES ('Just a test', -2);
+INSERT INTO Country VALUES ('Just a test', -2)
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.CC2) violated 
+
+
+SQL> -- Tests CC2 (should pass)
+SQL> INSERT INTO Country VALUES ('THIS SHOULD WORK', 0);
+
+1 row created.
+
+Commit complete.
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Event Test
+SQL> -- --------------------------------------------------------
+SQL> -- Tests EC1
+SQL> INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport');
+INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (OBRIENJO.EC1) violated 
+
+
+SQL> -- Tests EC2
+SQL> INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport');
+INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport')
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.EC2) violated 
+
+
+SQL> -- Tests EC3
+SQL> INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport');
+INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport')
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.EC2) violated 
+
+
+SQL> -- Tests EC3
+SQL> INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S');
+INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S')
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.EC3) violated 
+
+
+SQL> -- Tests EC3
+SQL> INSERT INTO Event VALUES (2222, '8-JAN-16', 2, 'S');
+INSERT INTO Event VALUES (2222, '8-JAN-16', 2, 'S')
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.EC3) violated 
+
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Sponsors Test
+SQL> -- --------------------------------------------------------
+SQL> -- Tests SC1
+SQL> INSERT INTO Sponsors VALUES (1, 'Microsoft');
+INSERT INTO Sponsors VALUES (1, 'Microsoft')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (OBRIENJO.SC1) violated 
+
+
+SQL> -- Tests SC1
+SQL> INSERT INTO Sponsors VALUES (1, 'Apple');
+
+1 row created.
+
+Commit complete.
+SQL> -- Tests SC2
+SQL> INSERT INTO Sponsors VALUES (99999, 'Anything');
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.SC2) violated - parent key not found 
+
+
+SQL> SELECT S.eid
+  2  FROM Sponsors S
+  3  WHERE S.eid = 1;
+
+       EID                                                                      
+----------                                                                      
+         1                                                                      
+         1                                                                      
+         1                                                                      
+
+3 rows selected.
+
+SQL> DELETE FROM Event
+  2  WHERE eid = 1;
+
+1 row deleted.
+
+Commit complete.
+SQL> -- Tests SC2
+SQL> SELECT S.eid
+  2  FROM Sponsors S
+  3  WHERE S.eid = 1;
+
+no rows selected
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Athlete Test
+SQL> -- --------------------------------------------------------
+SQL> -- Test AC1
+SQL> INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10);
+INSERT INTO Athlete VALUES(10, 'test', 'test', 'United States', 10)
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.AC4) violated 
+
+
+SQL> -- Test AC3
+SQL> INSERT INTO Athlete VALUES(9231, 't', 't', 'made up', 10);
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.AC3) violated - parent key not found 
+
+
+SQL> -- Test AC2
+SQL> INSERT INTO Athlete VALUES(123123, 'q', 'w', 'South Africa', 9999912);
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.AC2) violated - parent key not found 
+
+
+SQL> -- ---------------------------------------------------------
+SQL> -- CompetesIn Test
+SQL> -- ---------------------------------------------------------
+SQL> -- Test CIC2
+SQL> INSERT INTO CompetesIn VALUES (94, 30 , 'lol');
+INSERT INTO CompetesIn VALUES (94, 30 , 'lol')
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.CIC2) violated 
+
+
+SQL> -- Test CIC1
+SQL> INSERT INTO CompetesIn VALUES (14, 31 , 'none');
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.CIC4) violated - parent key not found 
+
+
+SQL> -- Test CIC3
+SQL> INSERT INTO CompetesIn VALUES (66, 29, 'gold');
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.CIC3) violated - parent key not found 
+
+
+SQL> -- Test CIC4
+SQL> INSERT INTO CompetesIn VALUES (1, 1241241, 'gold');
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.CIC3) violated - parent key not found 
+
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Spectator Test
+SQL> -- --------------------------------------------------------
+SQL> -- Tests SPC1
+SQL> INSERT INTO Spectator VALUES (100, 'l', 'f', 'United States');
+INSERT INTO Spectator VALUES (100, 'l', 'f', 'United States')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (OBRIENJO.SPC1) violated 
+
+
+SQL> -- Tests SPC3
+SQL> INSERT INTO Spectator VALUES (1, 'joe', 'cool', 'NOT A COUNTRYIES');
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.SPC3) violated - parent key not found 
+
+
+SQL> --
+SQL> -- --------------------------------------------------------
+SQL> -- Ticket Test
+SQL> -- --------------------------------------------------------
+SQL> -- Tests TC1
+SQL> INSERT INTO Ticket VALUES (1, 1, 120, 1 , 100);
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.TC2) violated - parent key not found 
+
+
+SQL> -- Tests TC2
+SQL> INSERT INTO Ticket VALUES(1, 1, 200000, 1, 100);
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.TC2) violated - parent key not found 
+
+
+SQL> -- Tests TC4
+SQL> INSERT INTO Ticket VALUES(99, 1, 1, 1, 100);
+INSERT INTO Ticket VALUES(99, 1, 1, 1, 100)
+*
+ERROR at line 1:
+ORA-02290: check constraint (OBRIENJO.TC4) violated 
+
+
+SQL> -- Tests TC2
+SQL> INSERT INTO Ticket VALUES(1, 1, 30000, 84717, 100);
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.TC2) violated - parent key not found 
+
+
+SQL> -- Tests TC3
+SQL> INSERT INTO Ticket VALUES(99, 1, 2231, 2, 87482);
+
+1 row created.
+
+ERROR:
+ORA-02091: transaction rolled back 
+ORA-02291: integrity constraint (OBRIENJO.TC3) violated - parent key not found 
+
+
+SQL> --
+SQL> SPOOL OFF
