@@ -9,13 +9,13 @@ CIS 353 - Database Design Project
    Alen Ramic
 **************************************/
 --
-DROP TABLE Sponsors CASCADE CONSTRAINT;
+DROP TABLE Country CASCADE CONSTRAINT;
 DROP TABLE Event CASCADE CONSTRAINT;
 DROP TABLE Athlete CASCADE CONSTRAINT;
 DROP TABLE Spectator CASCADE CONSTRAINT;
 DROP TABLE Ticket CASCADE CONSTRAINT;
-DROP TABLE Country CASCADE CONSTRAINT;
 DROP TABLE CompetesIn CASCADE CONSTRAINT;
+DROP TABLE Sponsors CASCADE CONSTRAINT;
 --
 --
 CREATE TABLE Country
@@ -262,9 +262,9 @@ INSERT INTO Ticket VALUES (6, 1, 115, 6 , 105);
 INSERT INTO Ticket VALUES (7, 1, 114, 7 , 106);
 INSERT INTO Ticket VALUES (8, 1, 113, 8 , 107);
 INSERT INTO Ticket VALUES (9, 1, 112, 9 , 108);
-INSERT INTO Ticket VALUES (10 , 1, 111 , 10 , 109); 
+INSERT INTO Ticket VALUES (10, 1, 111, 10, 109); 
 INSERT INTO Ticket VALUES (11, 1, 110, 11 , 110);
-INSERT INTO Ticket VALUES 12, 1, 109, 12, 111);
+INSERT INTO Ticket VALUES (12, 1, 109, 12, 111);
 INSERT INTO Ticket VALUES (13, 1, 108, 13 , 112);
 INSERT INTO Ticket VALUES (14, 1, 107, 14 , 113);
 INSERT INTO Ticket VALUES (15, 1, 100, 15 , 114);
@@ -328,28 +328,28 @@ INSERT INTO Sponsors VALUES (15 , 'Facebook');
 INSERT INTO Sponsors VALUES (15 , 'Clean Water');
 --
 INSERT INTO CompetesIn VALUES (10 , 10 , 'none');
-INSERT INTO CompetesIn VALUES (2,. 11 , 'silver');
+INSERT INTO CompetesIn VALUES (2, 11 , 'silver');
 INSERT INTO CompetesIn VALUES (3 , 12 , 'bronze');
 INSERT INTO CompetesIn VALUES (4 , 13 , 'none');
-INSERT INTO CompetesIn VALUES (5 , 15 , 'none');I
+INSERT INTO CompetesIn VALUES (5 , 15 , 'none');
 INSERT INTO CompetesIn VALUES (6 , 14 , 'gold');
 INSERT INTO CompetesIn VALUES (7 , 16 , 'silver');
 INSERT INTO CompetesIn VALUES (8 , 17 , 'bronze');
 INSERT INTO CompetesIn VALUES (9 , 18 , 'none' );
 INSERT INTO CompetesIn VALUES (10 , 19 , 'gold');
-INSERT INTO CompetesIn VALUES (11,. 20 , 'silver');
+INSERT INTO CompetesIn VALUES (11, 20 , 'silver');
 INSERT INTO CompetesIn VALUES (12 , 21 , 'bronze');
 INSERT INTO CompetesIn VALUES (13, 22, 'none');
-INSERT INTO CompetesIn VALUES (14, 23 , 'none');I
+INSERT INTO CompetesIn VALUES (14, 23 , 'none');
 INSERT INTO CompetesIn VALUES (15, 24 , 'gold');
 INSERT INTO CompetesIn VALUES (16, 25 , 'silver');
 INSERT INTO CompetesIn VALUES (8 , 26 , 'silver');
 INSERT INTO CompetesIn VALUES (9 , 27 , 'none' );
 INSERT INTO CompetesIn VALUES (12 , 28 , 'gold');
 INSERT INTO CompetesIn VALUES (13, 29, 'none');
-INSERT INTO CompetesIn VALUES (14, 30 , 'none');I
-
-
+INSERT INTO CompetesIn VALUES (14, 30 , 'none');
+--
+--
 SET FEEDBACK ON
 COMMIT;
 --
@@ -363,7 +363,6 @@ SELECT * FROM Spectator;
 SELECT * FROM Ticket;
 SELECT * FROM Sponsors;
 SELECT * FROM CompetesIn;
-SELECT * FROM Event;
 --
 --
 SELECT C.cname FROM Country C
@@ -395,8 +394,6 @@ S1.eid < S2.eid ;
 -- Correlated subquery
 -- ------------------------------------
 --
-
---correlated subquery 
 SELECT E.eid, E.event_date
 FROM Event E
 WHERE  
@@ -449,7 +446,7 @@ ORDER BY COUNT(*);
 --------------------------------------
 --  Join Involving 4 relations ----
 --------------------------------------
-SELECT S.fname, A.fname
+SELECT DISTINCT S.fname, A.fname
 FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
 WHERE T.sid = S.sid AND
 		T.eid = E.eid AND
