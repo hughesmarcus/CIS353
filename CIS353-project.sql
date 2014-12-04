@@ -10,13 +10,24 @@ CIS 353 - Database Design Project
 **************************************/
 --
 SET FEEDBACK OFF
-DROP TABLE Sponsors;
-DROP TABLE Event;
-DROP TABLE Athlete;
-DROP TABLE Spectator;
-DROP TABLE Ticket;
-DROP TABLE Country;
-DROP TABLE CompetesIn;
+DROP TABLE Sponsors CASCADE CONSTRAINT;
+DROP TABLE Event CASCADE CONSTRAINT;
+DROP TABLE Athlete CASCADE CONSTRAINT;
+DROP TABLE Spectator CASCADE CONSTRAINT;
+DROP TABLE Ticket CASCADE CONSTRAINT;
+DROP TABLE Country CASCADE CONSTRAINT;
+DROP TABLE CompetesIn CASCADE CONSTRAINT;
+--
+--
+CREATE TABLE Country
+(
+cname CHAR(35) NOT NULL,
+population INTEGER NOT NULL,
+--
+--
+CONSTRAINT CC1 PRIMARY KEY (cname),
+CONSTRAINT CC2 CHECK (population >= 0)
+);
 --
 -- ------------------------------------
 -- Event table
@@ -72,10 +83,10 @@ mentorID INTEGER,
 CONSTRAINT AC1 PRIMARY KEY (aid),
 CONSTRAINT AC2 FOREIGN KEY (mentorID) REFERENCES Athlete(aid)
 	ON DELETE CASCADE
-	DEFERABLE INITIALLY DEFERRED,
+	DEFERRABLE INITIALLY DEFERRED,
 CONSTRAINT AC3 FOREIGN KEY (country) REFERENCES Country(cname)
 	ON DELETE CASCADE
-	DEFERABLE INITIALLY DEFERRED
+	DEFERRABLE INITIALLY DEFERRED
 );
 --
 CREATE TABLE CompetesIn
@@ -85,20 +96,15 @@ aid INTEGER,
 medal CHAR(15) NOT NULL,
 --
 CONSTRAINT CIC1 PRIMARY KEY (eid, aid),
-CONSTRAINT CIC2 CHECK(medal = 'gold' || medal = 'silver' || medal = 'bronze' || medal = 'none'),
-CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid),
+CONSTRAINT CIC2 CHECK(medal = 'gold' OR medal = 'silver' OR medal = 'bronze' OR medal = 'none'),
+CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid)
+	ON DELETE CASCADE
+	DEFERRABLE INITIALLY DEFERRED,
 CONSTRAINT CIC4 FOREIGN KEY (aid) REFERENCES Athlete(aid)
+	ON DELETE CASCADE
+	DEFERRABLE INITIALLY DEFERRED
 );
 --
-CREATE TABLE Country
-(
-cname CHAR(35) NOT NULL,
-population INTEGER NOT NULL,
---
---
-CONSTRAINT CC1 PRIMARY KEY (cname),
-CONSTRAINT CC2 CHECK (population >= 0)
-);
 --
 -- ------------------------------------
 -- Spectator table
@@ -114,6 +120,8 @@ cname CHAR(35) NOT NULL,
 --
 CONSTRAINT SPC1 PRIMARY KEY (sid),
 CONSTRAINT SPC3 FOREIGN KEY (cname) REFERENCES Country(cname)
+	ON DELETE CASCADE
+	DEFERRABLE INITIALLY DEFERRED
 );
 --
 -- ------------------------------------
@@ -152,7 +160,7 @@ INSERT INTO Event VALUES (4, '21-AUG-16', 30, 'Volleyball');
 INSERT INTO Event VALUES (5, '07-AUG-16',254, 'Synchronized Swimming');
 INSERT INTO Event VALUES (6, '09-AUG-16', 670, 'Rowing');
 INSERT INTO Event VALUES (7, '11-AUG-16', 51, 'Judo');
-INSERT INTO Event VALUES (8, '11-AUG-16', 0. 'Football');
+INSERT INTO Event VALUES (8, '11-AUG-16', 0, 'Football');
 INSERT INTO Event VALUES (9, '11-AUG-16', 87, 'Cycling Road');
 INSERT INTO Event VALUES (10, '21-AUG-16', 67, 'Tennis');
 INSERT INTO Event VALUES (11, '15-AUG-16', 9000, 'Golf');
