@@ -396,4 +396,29 @@ HAVING COUNT(*) > 3;
 --
 -- TEST CONSTRAINTS
 --
+-- ------------------------------------
+-- Country Test
+-- ------------------------------------
+INSERT INTO Country VALUES ('United States', 2);
+INSERT INTO Country VALUES ('Just a test', -2);
+INSERT INTO Country VALUES ('THIS SHOULD WORK', 0);
+--
+-- ------------------------------------
+-- Event Test
+-- ------------------------------------
+INSERT INTO Event VALUES (1, '6-AUG-16', 2, 'Sport');
+INSERT INTO Event VALUES (44444, '6-AUG-16', 10001, 'Sport');
+INSERT INTO Event VALUES (44444, '6-AUG-16', -1, 'Sport');
+INSERT INTO Event VALUES (55555, '6-AUG-12', 2, 'S');
+INSERT INTO Event VALUES (2222, '8-AUG-16', 2, 'S');
+--
+-- ------------------------------------
+-- Sponsors Test
+-- ------------------------------------
+INSERT INTO Sponsors VALUES (1, 'Microsoft');
+INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES ();
+INSERT INTO Sponsors VALUES ();
+--
 SPOOL OFF
