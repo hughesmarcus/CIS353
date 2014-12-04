@@ -295,8 +295,7 @@ S1.eid < S2.eid ;
 -- Correlated subquery
 -- ------------------------------------
 --
-SELECT *, 
-Event E
+
 --correlated subquery 
 SELECT E.eid, E.event_date
 FROM Event E
@@ -309,7 +308,6 @@ WHERE
 -- Non-correlated subquery
 -- ------------------------------------
 --
-SELECT *, 
 -- non-correlated subquery
 SELECT E.eid,  E.event_date
 FROM Event E
