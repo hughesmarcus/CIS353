@@ -10,23 +10,14 @@ CIS 353 - Database Design Project
 **************************************/
 --
 SET FEEDBACK OFF
-DROP TABLE Sponsors CASCADE CONSTRAINTS;
-DROP TABLE Event CASCADE CONSTRAINTS;
-DROP TABLE Athlete CASCADE CONSTRAINTS;
-DROP TABLE Spectator CASCADE CONSTRAINTS;
-DROP TABLE Ticket CASCADE CONSTRAINTS;
-DROP TABLE Country CASCADE CONSTRAINTS;
-DROP TABLE CompetesIn CASCADE CONSTRAINTS;
+DROP TABLE Sponsors;
+DROP TABLE Event;
+DROP TABLE Athlete;
+DROP TABLE Spectator;
+DROP TABLE Ticket;
+DROP TABLE Country;
+DROP TABLE CompetesIn;
 --
-CREATE TABLE Country
-(
-cname CHAR(35) NOT NULL,
-population INTEGER NOT NULL,
---
---
-CONSTRAINT CC1 PRIMARY KEY (cname),
-CONSTRAINT CC2 CHECK (population >= 0)
-);
 -- ------------------------------------
 -- Event table
 -- ------------------------------------
@@ -94,13 +85,20 @@ aid INTEGER,
 medal CHAR(15) NOT NULL,
 --
 CONSTRAINT CIC1 PRIMARY KEY (eid, aid),
-CONSTRAINT CIC2 CHECK(medal = 'gold' OR medal = 'silver' OR medal = 'bronze' OR medal = 'none'),
-CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid)
-	ON DELETE CASCADE
-	DEFERRABLE INITIALLY DEFERRED,
+CONSTRAINT CIC2 CHECK(medal = 'gold' || medal = 'silver' || medal = 'bronze' || medal = 'none'),
+CONSTRAINT CIC3 FOREIGN KEY (eid) REFERENCES Event(eid),
 CONSTRAINT CIC4 FOREIGN KEY (aid) REFERENCES Athlete(aid)
 );
 --
+CREATE TABLE Country
+(
+cname CHAR(35) NOT NULL,
+population INTEGER NOT NULL,
+--
+--
+CONSTRAINT CC1 PRIMARY KEY (cname),
+CONSTRAINT CC2 CHECK (population >= 0)
+);
 --
 -- ------------------------------------
 -- Spectator table
@@ -154,7 +152,7 @@ INSERT INTO Event VALUES (4, '21-AUG-16', 30, 'Volleyball');
 INSERT INTO Event VALUES (5, '07-AUG-16',254, 'Synchronized Swimming');
 INSERT INTO Event VALUES (6, '09-AUG-16', 670, 'Rowing');
 INSERT INTO Event VALUES (7, '11-AUG-16', 51, 'Judo');
-INSERT INTO Event VALUES (8, '11-AUG-16', 0, 'Football');
+INSERT INTO Event VALUES (8, '11-AUG-16', 0. 'Football');
 INSERT INTO Event VALUES (9, '11-AUG-16', 87, 'Cycling Road');
 INSERT INTO Event VALUES (10, '21-AUG-16', 67, 'Tennis');
 INSERT INTO Event VALUES (11, '15-AUG-16', 9000, 'Golf');
@@ -345,8 +343,9 @@ WHERE NOT EXISTS((SELECT E.eid
 --------------------------------------
 Select S.country, COUNT(*)
 from Spectator s, Country c
-Where c.population > 300,000,000
-Group By S.country
+Where c.population > 300,000,000 AND
+c.cname = s.country
+Group By s.country
 Having count(*) > 3;
 
 
