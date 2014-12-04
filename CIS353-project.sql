@@ -259,9 +259,6 @@ COMMIT;
 --
 -- ------------------------------------
 -- -----------QUERIES BELOW------------
--- ------------------------------------
--- Marcus, your queries don't work.---- 
--- At all. ----------------------------
 --
 SELECT * FROM Event;
 SELECT * FROM Athlete;
