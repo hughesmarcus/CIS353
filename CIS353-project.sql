@@ -226,6 +226,8 @@ COMMIT;
 -- ------------------------------------
 -- -----------QUERIES BELOW------------
 -- ------------------------------------
+-- Marcus, your queries don't work.---- 
+-- At all. ----------------------------
 --
 SELECT * FROM Event;
 SELECT C.cname FROM Country C
@@ -295,5 +297,5 @@ WHERE NOT EXISTS((SELECT E.eid
 				    FROM Event E, CompetesIn C
 				    WHERE C.aid = A.aid AND
 						  C.eid = E.eid AND
-						  E.eid = 4));
+						  E.eid = 4)));
 SPOOL OFF
