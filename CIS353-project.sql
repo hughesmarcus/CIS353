@@ -313,4 +313,15 @@ WHERE NOT EXISTS((SELECT E.eid
 				    WHERE C.aid = A.aid AND
 						  C.eid = E.eid AND
 						  E.eid = 4)));
+--
+-- ------------------------------------
+-- Join Query
+-- ------------------------------------
+SELECT S.fname, A.fname
+FROM Spectator S, Athlete A, Ticket T, Event E, CompetesIn CI, Country C
+WHERE T.sid = S.sid AND
+	T.sid = E.eid AND
+	A.aid = CI.aid AND
+	E.eid = CI.eid AND
+	S.country = A.country;
 SPOOL OFF
